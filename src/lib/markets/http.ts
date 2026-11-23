@@ -37,7 +37,6 @@ export async function getJson<T>(url: string): Promise<T | null> {
       const res = await fetch(url, {
         headers: { Accept: "application/json" },
         signal: AbortSignal.timeout(TIMEOUT_MS),
-        cache: "no-store", // caching happens one level up, on the normalised result
       });
       if (res.status === 404) return null;
       if (res.ok) return (await res.json()) as T;

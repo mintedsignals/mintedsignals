@@ -6,8 +6,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { getGuide, guideEntries, robotsFor } from "@/content";
 import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
-/** Wait for the guide before responding, so unknown slugs get a real 404. */
-export const instant = false;
+/** Static export: only the listed pages exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return guideEntries.map((g) => ({ slug: g.slug }));

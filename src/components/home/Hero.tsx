@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { HottestMarkets } from "@/components/markets/HottestMarkets";
 import { HottestMarketsSkeleton } from "@/components/markets/HottestMarketsSkeleton";
-import { MARKETS_REVALIDATE_SECONDS } from "@/config/markets";
+import { MARKETS_REFRESH_MINUTES } from "@/config/markets";
 import { formatCount } from "@/lib/format";
 import { getMarketsSnapshot } from "@/lib/markets";
 
@@ -53,7 +53,7 @@ export function Hero() {
           </div>
           <div className="flex flex-col-reverse gap-1">
             <dt className="text-[13px] text-muted">odds refresh</dt>
-            <dd className={statValue}>{MARKETS_REVALIDATE_SECONDS}s</dd>
+            <dd className={statValue}>{MARKETS_REFRESH_MINUTES}m</dd>
           </div>
         </dl>
       </div>

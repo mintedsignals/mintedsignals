@@ -1,0 +1,47 @@
+# Rebuilds the static site with fresh market odds and deploys it to Cloudflare.
+#
+# The site is a static export (see next.config.ts), so the odds are only as fresh as the
+# last build. This runs every 30 minutes, on every push to main, and on demand (Actions tab →
+# "Rebuild and deploy" → Run workflow). Keep MARKETS_REFRESH_MINUTES in
+# src/config/markets.ts in step with the schedule.
+#
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   a token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  your Cloudflare account ID
+#
+# If a venue's API is down, the build fails on purpose and the live site keeps its last
+# good version. GitHub emails you about failed runs; occasional ones are expected.
+name: Rebuild and deploy
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once; a newer run waits for the current one.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://mintedsignals.io
+      - run: pnpm exec wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

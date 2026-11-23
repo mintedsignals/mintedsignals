@@ -1,65 +1,65 @@
 import "server-only";
+import { readFile } from "node:fs/promises";
 import type { Category } from "@/config/site";
-import { cacheLife, cacheTag } from "next/cache";
-import { HOTTEST, KALSHI_SERIES, MARKETS_REVALIDATE_SECONDS, POLYMARKET_MAX_MARKETS } from "@/config/markets";
+import { HOTTEST, KALSHI_SERIES, POLYMARKET_MAX_MARKETS } from "@/config/markets";
 import { selectHottest, type HottestOptions } from "./hottest";
 import { getJson } from "./http";
-import { fetchKalshiMarket, fetchKalshiMarkets } from "./kalshi";
-import { fetchPolymarketMarket, fetchPolymarketMarkets } from "./polymarket";
-import { marketSlug, tickerFromKalshiSlug } from "./slug";
-import { buildSnapshot, snapshotFromLastGood, type LastGood } from "./snapshot";
+import { fetchKalshiMarkets } from "./kalshi";
+import { fetchPolymarketMarkets } from "./polymarket";
+import { buildSnapshot } from "./snapshot";
+import { SNAPSHOT_FILE } from "./snapshot-file";
 import { toSummary, venues, type Market, type MarketSummary, type MarketsSnapshot, type Venue } from "./types";
 
 export type { Market, MarketSummary, MarketsSnapshot, Venue } from "./types";
 export { venueNames, venues } from "./types";
 
 /**
- * Market data for the whole site. Server only: the venue APIs are never called from the browser.
+ * Market data for the whole site. The site is a static export (see next.config.ts), so this
+ * runs only during `next build`: the venue APIs are fetched once per build and every page is
+ * rendered from that one snapshot. A scheduled rebuild refreshes the odds (docs/DEPLOY.md).
  *
- * Caching: the normalised snapshot is cached for MARKETS_REVALIDATE_SECONDS and refreshed in
- * the background. If a venue fails, its last good data is served (status "stale"). That copy
- * lives in this server process's memory, so a brand-new server instance has none until its
- * first successful fetch.
+ * If a venue fails, or more than a quarter of the Kalshi series do, this throws and the build
+ * fails, so the live site keeps its previous build rather than shipping missing odds.
  */
 
-const lastGood: LastGood = {};
+let snapshotPromise: Promise<MarketsSnapshot> | null = null;
 
-const cacheProfile = {
-  stale: MARKETS_REVALIDATE_SECONDS,
-  revalidate: MARKETS_REVALIDATE_SECONDS,
-  expire: 60 * 60 * 24,
-};
-
-async function loadSnapshot(): Promise<MarketsSnapshot> {
-  "use cache";
-  cacheLife(cacheProfile);
-  cacheTag("markets");
-
+async function fetchSnapshot(): Promise<MarketsSnapshot> {
   const { snapshot, freshVenues } = await buildSnapshot(
     {
       polymarket: () => fetchPolymarketMarkets(getJson, POLYMARKET_MAX_MARKETS),
       kalshi: () => fetchKalshiMarkets(getJson, KALSHI_SERIES),
     },
-    lastGood,
+    {}, // no earlier copy at build time
   );
-
-  // A venue with no data at all (failed, and nothing saved in this process): throw rather
-  // than cache a snapshot missing that venue. Next.js then keeps serving the previous
-  // page, which still has it (checked on a production build with the APIs returning 503).
-  const missing = venues.filter((v) => snapshot.venues[v].status === "unavailable");
+  const missing = venues.filter((v) => snapshot.venues[v].status !== "ok");
   if (missing.length > 0) {
     throw new Error(`Market data unavailable (${freshVenues} fresh): ${JSON.stringify(snapshot.venues)}`);
   }
   return snapshot;
 }
 
-/** Every tracked open market from both venues. Never throws. */
-export async function getMarketsSnapshot(): Promise<MarketsSnapshot> {
+/**
+ * Every tracked open market from both venues. During `pnpm build` this reads the snapshot that
+ * scripts/fetch-markets.ts saved just before, so the whole build uses one fetch. Without that
+ * file (e.g. `next dev`), it fetches live once per process.
+ */
+export function getMarketsSnapshot(): Promise<MarketsSnapshot> {
+  snapshotPromise ??= readSavedSnapshot()
+    .then((saved) => saved ?? fetchSnapshot())
+    .catch((error) => {
+      snapshotPromise = null; // let a later page retry rather than reuse the failure
+      console.error("[markets] snapshot failed", error);
+      throw error;
+    });
+  return snapshotPromise;
+}
+
+async function readSavedSnapshot(): Promise<MarketsSnapshot | null> {
   try {
-    return await loadSnapshot();
-  } catch (error) {
-    console.error("[markets] snapshot failed", error);
-    return snapshotFromLastGood(lastGood, error instanceof Error ? error.message : String(error));
+    return JSON.parse(await readFile(SNAPSHOT_FILE, "utf8")) as MarketsSnapshot;
+  } catch {
+    return null;
   }
 }
 
@@ -69,29 +69,10 @@ export async function getHottestMarkets(options: Omit<HottestOptions, "pinned" |
   return selectHottest(markets, { ...options, onePerEvent: HOTTEST.onePerEvent, pinned: HOTTEST.pinned });
 }
 
-async function loadMarket(venue: Venue, slug: string): Promise<Market | null> {
-  "use cache";
-  cacheLife(cacheProfile);
-  cacheTag("markets", `market:${venue}:${slug}`);
-
-  if (venue === "polymarket") return fetchPolymarketMarket(getJson, slug);
-
-  const ticker = tickerFromKalshiSlug(slug);
-  if (!ticker) return null;
-  const series = KALSHI_SERIES.find((s) => ticker.startsWith(`${s.ticker}-`));
-  return fetchKalshiMarket(getJson, ticker, series?.category);
-}
-
-/**
- * One market for /markets/[venue]/[slug], open or closed. Uses the snapshot when the market
- * is in it, otherwise asks the venue. Returns null if the market doesn't exist.
- * Throws if the venue is down and we have no copy (the page decides what to show).
- */
+/** One market for /markets/[venue]/[slug]. Only markets in the snapshot have pages. */
 export async function getMarket(venue: Venue, slug: string): Promise<Market | null> {
   const { markets } = await getMarketsSnapshot();
-  const known = markets.find((m) => m.venue === venue && m.slug === slug);
-  if (known) return known;
-  return loadMarket(venue, slug);
+  return markets.find((m) => m.venue === venue && m.slug === slug) ?? null;
 }
 
 export const isVenue = (value: string): value is Venue => (venues as string[]).includes(value);
@@ -125,25 +106,8 @@ export async function getRelatedMarkets(
   return { sameEvent, sameCategory };
 }
 
-/** The highest-volume market pages, to prerender at build time. Others render on first visit. */
-export async function getTopMarketParams(limit: number): Promise<{ venue: Venue; slug: string }[]> {
+/** Every market page to build: one per market in the snapshot. */
+export async function getAllMarketParams(): Promise<{ venue: Venue; slug: string }[]> {
   const { markets } = await getMarketsSnapshot();
-  return selectHottest(markets, { limit, onePerEvent: false }).map((m) => ({ venue: m.venue, slug: m.slug }));
-}
-
-/**
- * One market by its id ("kalshi:KXFED-26DEC-H0"), for /go redirects. Uses the snapshot,
- * then asks the venue (e.g. for a market that has closed since the snapshot).
- */
-export async function getMarketById(id: string): Promise<Market | null> {
-  const i = id.indexOf(":");
-  const venue = id.slice(0, i);
-  const nativeId = id.slice(i + 1);
-  if (i === -1) return null;
-  if (!venue || !nativeId || !isVenue(venue)) return null;
-  const { markets } = await getMarketsSnapshot();
-  const known = markets.find((m) => m.id === id);
-  if (known) return known;
-  // loadMarket reads the id from the end of a slug, so any question words will do.
-  return loadMarket(venue, marketSlug("market", nativeId));
+  return markets.map((m) => ({ venue: m.venue, slug: m.slug }));
 }

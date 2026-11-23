@@ -5,8 +5,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { articleEntries, getArticle, robotsFor } from "@/content";
 import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
-/** Wait for the article before responding, so unknown slugs get a real 404. */
-export const instant = false;
+/** Static export: only the listed pages exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return articleEntries.map((a) => ({ slug: a.slug }));

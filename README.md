@@ -1,9 +1,9 @@
-# Oddsboard (working name)
+# Minted Signals
 
 SEO-first content site about prediction markets. The brief is in [docs/BRIEF.md](docs/BRIEF.md), and the approved homepage design is [docs/design/design-reference.html](docs/design/design-reference.html), a visual spec only.
 
 ## Stack
-Next.js 16 (App Router, Cache Components), TypeScript, Tailwind CSS v4, pnpm. Deployed on Vercel.
+Next.js 16 (App Router, static export), TypeScript, Tailwind CSS v4, pnpm. Hosted on the Cloudflare Workers Free plan as static files, plus a tiny Worker for affiliate redirects and newsletter signups: see [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Commands
 ```bash
@@ -11,6 +11,8 @@ pnpm dev --port 3200   # dev server
 pnpm typecheck         # route types + tsc
 pnpm lint
 pnpm build
+pnpm run fetch-markets # fetch the market snapshot into .data/ (pnpm build runs it first)
+pnpm run deploy        # fetch odds, build and deploy to Cloudflare (see docs/DEPLOY.md)
 pnpm test              # unit tests (no network)
 pnpm test:live         # calls the real Polymarket and Kalshi APIs
 ```
@@ -44,7 +46,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 - Kalshi 24h volume is in contracts, counted as $1 each, so it is approximate next to Polymarket's dollar volume.
 - `POLYMARKET_API_BASE` / `KALSHI_API_BASE` override the API hosts (testing, or Kalshi's demo environment).
 - Market pages use our own slugs, `<question words>--<venue id>`, because venue slugs aren't reliably readable.
-- Data is cached for 60 seconds. If a venue fails, its last good data is served (kept in server memory per instance).
+- Odds are fetched once per build (`scripts/fetch-markets.ts`) and refreshed by a scheduled rebuild every 30 minutes. If a venue fails, the build fails and the live site keeps its previous version.
 
 ## Publishing content
 Every guide, review and article starts as a draft: it renders with a draft banner, is marked noindex and stays out of the sitemap.

@@ -12,8 +12,8 @@ import { getHottestMarkets } from "@/lib/markets";
 import { marketPath } from "@/lib/markets/links";
 import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
-/** Wait for the review before responding, so unknown slugs get a real 404. */
-export const instant = false;
+/** Static export: only the listed pages exist; anything else is a 404. */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return reviewEntries.map((r) => ({ slug: r.slug }));
@@ -81,7 +81,7 @@ export default async function ReviewPage({ params }: PageProps<"/platforms/[slug
                   </li>
                 ))}
               </ul>
-              <Link href={`/markets?venue=${review.venue}`} className="mt-4 inline-block text-sm font-semibold">
+              <Link href={`/markets/venue/${review.venue}`} className="mt-4 inline-block text-sm font-semibold">
                 All {review.name} markets →
               </Link>
             </div>

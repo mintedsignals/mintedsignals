@@ -4,8 +4,12 @@ import type { Category } from "@/config/site";
  * Market data settings. Edit this file to change what the site tracks and shows.
  */
 
-/** How long market data is cached before a background refresh, in seconds. */
-export const MARKETS_REVALIDATE_SECONDS = 60;
+/**
+ * How often the scheduled rebuild refreshes the odds, in minutes. The site is static: odds
+ * are fetched when it's built. Keep this in step with the schedule in
+ * .github/workflows/deploy.yml (it's shown on the site as "odds refresh").
+ */
+export const MARKETS_REFRESH_MINUTES = 30;
 
 /** Polymarket: how many open markets to load, highest 24h volume first (pages of 100). */
 export const POLYMARKET_MAX_MARKETS = 300;

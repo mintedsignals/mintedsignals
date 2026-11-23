@@ -5,6 +5,7 @@ import { site } from "@/config/site";
 export const alt = `${site.name}: prediction market odds, guides and analysis`;
 export const size = OG_SIZE;
 export const contentType = "image/png";
+export const dynamic = "force-static";
 
 /** Default share image for every page without its own. */
 export default function Image() {

@@ -15,7 +15,7 @@ describe("breadcrumbJsonLd", () => {
 describe("articleJsonLd", () => {
   it("credits the site when the author is a placeholder", () => {
     const data = articleJsonLd({ path: "/analysis/x", title: "T", description: "D", updated: "2026-11-17", author: "[AUTHOR]" });
-    expect(data.author).toEqual({ "@type": "Organization", name: "Oddsboard", url: "http://localhost:3000" });
+    expect(data.author).toEqual({ "@type": "Organization", name: "Minted Signals", url: "http://localhost:3000" });
     expect(data.dateModified).toBe("2026-11-17");
     expect(data.url).toBe("http://localhost:3000/analysis/x");
   });

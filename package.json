@@ -1,16 +1,19 @@
 {
-  "name": "oddsboard",
+  "name": "minted-signals",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm run fetch-markets && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:live": "LIVE=1 vitest run src/lib/markets/live.test.ts"
+    "test:live": "LIVE=1 vitest run src/lib/markets/live.test.ts",
+    "deploy": "next build && wrangler deploy",
+    "preview": "next build && wrangler dev --port 8788",
+    "fetch-markets": "tsx --conditions=react-server scripts/fetch-markets.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -32,8 +35,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "wrangler": "4.166.0"
   },
   "packageManager": "pnpm@11.17.0"
 }

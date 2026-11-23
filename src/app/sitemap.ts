@@ -18,6 +18,9 @@ const staticPaths = [
   // (they're placeholders marked noindex until then).
 ];
 
+/** Written as a static file at build time (static export). */
+export const dynamic = "force-static";
+
 const published = (e: { status: string }) => e.status === "published";
 
 /** Every page we want indexed, including one entry per tracked market (~1,800). */

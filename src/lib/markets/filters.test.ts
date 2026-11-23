@@ -1,37 +1,60 @@
 import { describe, expect, it } from "vitest";
-import { filtersCopy, filtersHref, parseFilters } from "./filters";
+import { allFilterViews, filterSegments, filtersCopy, filtersHref, parseFilterSegments } from "./filters";
 
-describe("parseFilters", () => {
-  it("reads category, venue and page case-insensitively", () => {
-    expect(parseFilters({ category: "Politics", venue: "KALSHI", page: "3" })).toEqual({
-      category: "Politics",
-      venue: "kalshi",
-      page: 3,
-    });
-  });
-
-  it("ignores unknown or malformed values", () => {
-    expect(parseFilters({ category: "weather", venue: "betfair", page: "-2" })).toEqual({
-      category: undefined,
-      venue: undefined,
-      page: 1,
-    });
-    expect(parseFilters({ page: "1.5" }).page).toBe(1);
-    expect(parseFilters({ category: ["crypto", "sports"] }).category).toBe("Crypto");
+describe("filtersHref", () => {
+  it("builds path URLs in a fixed order, omitting page 1", () => {
+    expect(filtersHref({})).toBe("/markets");
+    expect(filtersHref({ page: 2 })).toBe("/markets/page/2");
+    expect(filtersHref({ venue: "kalshi", category: "Economy", page: 1 })).toBe("/markets/category/economy/venue/kalshi");
+    expect(filtersHref({ category: "Sports", page: 3 })).toBe("/markets/category/sports/page/3");
+    expect(filtersHref({ venue: "polymarket", page: 2 })).toBe("/markets/venue/polymarket/page/2");
   });
 });
 
-describe("filtersHref", () => {
-  it("builds canonical URLs in a fixed order, omitting page 1", () => {
-    expect(filtersHref({})).toBe("/markets");
-    expect(filtersHref({ venue: "kalshi", category: "Economy", page: 1 })).toBe("/markets?category=economy&venue=kalshi");
-    expect(filtersHref({ category: "Sports", page: 2 })).toBe("/markets?category=sports&page=2");
+describe("parseFilterSegments", () => {
+  it("round-trips every shape of URL", () => {
+    for (const f of [
+      { page: 1 },
+      { page: 4 },
+      { category: "Crypto" as const, page: 1 },
+      { venue: "kalshi" as const, page: 2 },
+      { category: "Politics" as const, venue: "polymarket" as const, page: 5 },
+    ]) {
+      expect(parseFilterSegments(filterSegments(f))).toEqual(f);
+    }
   });
 
-  it("round-trips through parseFilters", () => {
-    const f = { category: "Crypto" as const, venue: "polymarket" as const, page: 4 };
-    const query = Object.fromEntries(new URLSearchParams(filtersHref(f).split("?")[1]));
-    expect(parseFilters(query)).toEqual(f);
+  it("rejects anything that isn't a valid view", () => {
+    for (const bad of [
+      ["category", "weather"],
+      ["venue", "betfair"],
+      ["page", "1"],
+      ["page", "0"],
+      ["page", "02"],
+      ["page", "x"],
+      ["venue", "kalshi", "category", "crypto"], // wrong order
+      ["category", "crypto", "extra"],
+      ["category"],
+    ]) {
+      expect(parseFilterSegments(bad)).toBeNull();
+    }
+  });
+});
+
+describe("allFilterViews", () => {
+  it("lists every combination with the right number of pages", () => {
+    const views = allFilterViews(({ category, venue }) => (!category && !venue ? 120 : category === "Crypto" ? 51 : 0));
+    // all markets: 120 / 50 -> 3 pages
+    expect(views.filter((v) => !v.category && !v.venue).map((v) => v.page)).toEqual([1, 2, 3]);
+    // Crypto, any venue: 51 -> 2 pages
+    expect(views.filter((v) => v.category === "Crypto" && !v.venue).map((v) => v.page)).toEqual([1, 2]);
+    // empty views still get one page
+    expect(views.filter((v) => v.category === "Sports" && v.venue === "kalshi")).toEqual([
+      { category: "Sports", venue: "kalshi", page: 1 },
+    ]);
+    // (6 categories + all) x (2 venues + all) = 21 views, plus extra pages: 2 for all markets
+    // and 1 for each of the three Crypto views (this fake count ignores the venue).
+    expect(views.length).toBe(21 + 2 + 3);
   });
 });
 

@@ -1,10 +1,11 @@
 /**
  * Site-wide settings: name, URL, navigation and compliance copy.
- * The name is a working title (see docs/BRIEF.md). Change it here only.
+ * Change the name here only: it's used for the logo text, titles, footer, share images and
+ * structured data.
  */
 
 export const site = {
-  name: "Oddsboard",
+  name: "Minted Signals",
   tagline: "Independent news, data and guides on prediction markets.",
   description:
     "Live odds from Polymarket and Kalshi, plain-English guides, and analysis of the markets moving the most each day.",
@@ -28,8 +29,8 @@ export const headerCta: NavLink = { label: "Get the daily brief", href: "/#newsl
 export const categories = ["Politics", "Crypto", "Economy", "Sports", "Culture", "Other"] as const;
 export type Category = (typeof categories)[number];
 
-export const categoryHref = (category: Category) =>
-  `/markets?category=${category.toLowerCase()}`;
+/** Static filter page for a category (URL shapes in src/lib/markets/filters.ts). */
+export const categoryHref = (category: Category) => `/markets/category/${category.toLowerCase()}`;
 
 /** The six guides from the design. Content arrives as MDX in phase 5. */
 export const guides = [

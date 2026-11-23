@@ -38,7 +38,14 @@ export type PartnerId = keyof typeof partners;
 
 export const isPartnerId = (value: string): value is PartnerId => Object.hasOwn(partners, value);
 
-/** Link to use in pages: /go/kalshi or /go/kalshi?m=kalshi:KXFED... for a specific market. */
-export function goHref(partner: PartnerId, marketId?: string): string {
-  return marketId ? `/go/${partner}?m=${encodeURIComponent(marketId)}` : `/go/${partner}`;
+/**
+ * Link to use in pages: /go/kalshi, or for a specific market
+ * /go/kalshi?m=kalshi:KXFED...&to=<the market's page on the venue>.
+ * The site is static, so the link carries the destination; worker/index.ts only ever
+ * redirects to the partner's own domains (see buildPartnerUrl).
+ */
+export function goHref(partner: PartnerId, market?: { id: string; url: string }): string {
+  if (!market) return `/go/${partner}`;
+  const params = new URLSearchParams({ m: market.id, to: market.url });
+  return `/go/${partner}?${params}`;
 }

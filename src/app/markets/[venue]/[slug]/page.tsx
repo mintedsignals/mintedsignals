@@ -5,7 +5,7 @@ import { AffiliateNote } from "@/components/AffiliateNote";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { MarketRow, MarketRowHeader } from "@/components/markets/MarketRow";
 import { VenueBadge } from "@/components/markets/VenueBadge";
-import { MARKETS_REVALIDATE_SECONDS } from "@/config/markets";
+import { MARKETS_REFRESH_MINUTES } from "@/config/markets";
 import { goHref } from "@/config/partners";
 import { categoryHref } from "@/config/site";
 import { platformCtaAllowed } from "@/lib/compliance";
@@ -14,26 +14,23 @@ import {
   getMarket,
   getMarketsSnapshot,
   getRelatedMarkets,
-  getTopMarketParams,
+  getAllMarketParams,
   isVenue,
   venueNames,
   type Market,
   type MarketSummary,
 } from "@/lib/markets";
 import { marketPath } from "@/lib/markets/links";
+import { defaultOgImages } from "@/lib/seo";
 
 /**
- * Market pages are the main SEO play ("[event] odds"), so they render fully on the server
- * and unknown markets return a real 404. `instant = false` lets this route wait for its
- * data before responding instead of streaming a shell first.
+ * Market pages are the main SEO play ("[event] odds"), so every market in the snapshot gets
+ * a static page at build time. Markets not in the snapshot (e.g. closed since) are 404s.
  */
-export const instant = false;
+export const dynamicParams = false;
 
-/** Prerender the busiest markets at build time; the rest render on first visit, then cache. */
 export async function generateStaticParams() {
-  const params = await getTopMarketParams(100);
-  // Cache Components needs at least one param; this one 404s.
-  return params.length > 0 ? params : [{ venue: "polymarket", slug: "placeholder" }];
+  return getAllMarketParams();
 }
 
 async function load(params: PageProps<"/markets/[venue]/[slug]">["params"]): Promise<Market | null> {
@@ -58,7 +55,7 @@ export async function generateMetadata({ params }: PageProps<"/markets/[venue]/[
     title,
     description,
     alternates: { canonical: marketPath(market) },
-    openGraph: { title, description, type: "article", url: marketPath(market) },
+    openGraph: { title, description, type: "article", url: marketPath(market), images: defaultOgImages },
   };
 }
 
@@ -135,7 +132,7 @@ export default async function MarketPage({ params }: PageProps<"/markets/[venue]
             </div>
             <p className="mt-4 text-xs text-muted">
               Odds from {venue}
-              {updated && `, as of ${updated}`}. Refreshed every {MARKETS_REVALIDATE_SECONDS} seconds.
+              {updated && `, as of ${updated}`}. Refreshed about every {MARKETS_REFRESH_MINUTES} minutes.
               {market.venue === "kalshi" && " Kalshi volume is contracts traded, counted at $1 each."}
             </p>
           </section>
@@ -177,7 +174,7 @@ export default async function MarketPage({ params }: PageProps<"/markets/[venue]
                 : `This market has closed, but ${venue} lists similar markets.`}
             </p>
             <a
-              href={goHref(market.venue, market.id)}
+              href={goHref(market.venue, market)}
               rel="sponsored noopener"
               className="rounded-control bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-white no-underline hover:bg-link hover:text-white"
             >

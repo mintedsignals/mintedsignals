@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Internal Worker name (also https://oddsboard.<subdomain>.workers.dev). Visitors use mintedsignals.io.
+  "name": "oddsboard",
+  // Runs only for /go/* and /api/* (see run_worker_first). Everything else is a static file.
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-19",
+  "workers_dev": true,
+  // No per-version preview URLs: they'd be indexable duplicates of the site.
+  "preview_urls": false,
+  "routes": [{ "pattern": "mintedsignals.io", "custom_domain": true }],
+  "assets": {
+    // The static site written by `next build` (output: "export").
+    "directory": "out",
+    "binding": "ASSETS",
+    // /markets serves markets.html, /markets/ redirects to /markets.
+    "html_handling": "auto-trailing-slash",
+    // Unknown paths get out/404.html with a real 404 status.
+    "not_found_handling": "404-page",
+    // Static files are free and unlimited; only these paths invoke the Worker.
+    "run_worker_first": ["/go/*", "/api/*"]
+  },
+  // The first deploys ran the OpenNext adapter, which created this Durable Object class.
+  // v2 removes it now that the site is static.
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["DOQueueHandler"] },
+    { "tag": "v2", "deleted_classes": ["DOQueueHandler"] }
+  ],
+  // Keeps console output (affiliate_click, newsletter errors) searchable in the dashboard.
+  "observability": { "enabled": true }
+}
