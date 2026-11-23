@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleLayout } from "@/components/ArticleLayout";
+import { JsonLd } from "@/components/JsonLd";
 import { articleEntries, getArticle, robotsFor } from "@/content";
+import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
 /** Wait for the article before responding, so unknown slugs get a real 404. */
 export const instant = false;
@@ -18,7 +20,13 @@ export async function generateMetadata({ params }: PageProps<"/analysis/[slug]">
     description: article.description,
     alternates: { canonical: `/analysis/${article.slug}` },
     robots: robotsFor(article.status),
-    openGraph: { title: article.title, description: article.description, type: "article", modifiedTime: article.updated },
+    openGraph: {
+      title: article.title,
+      description: article.description,
+      type: "article",
+      modifiedTime: article.updated,
+      images: defaultOgImages,
+    },
   };
 }
 
@@ -37,6 +45,15 @@ export default async function ArticlePage({ params }: PageProps<"/analysis/[slug
       updated={article.updated}
       status={article.status}
     >
+      <JsonLd
+        data={articleJsonLd({
+          path: `/analysis/${article.slug}`,
+          title: article.title,
+          description: article.description,
+          updated: article.updated,
+          author: article.author,
+        })}
+      />
       <Body />
     </ArticleLayout>
   );

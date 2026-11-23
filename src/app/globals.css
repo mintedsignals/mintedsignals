@@ -64,6 +64,13 @@
   a:hover {
     color: var(--color-ink);
   }
+
+  /* Links inside running text are underlined, not told apart by colour alone (accessibility). */
+  :where(p, li, dd, blockquote, td) > a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
 }
 
 @layer components {

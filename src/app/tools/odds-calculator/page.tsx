@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { OddsCalculator } from "@/components/tools/OddsCalculator";
+import { JsonLd } from "@/components/JsonLd";
 import { calculatorFaq } from "@/config/faq";
+import { faqJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Prediction market odds calculator",
@@ -15,6 +17,7 @@ export default function OddsCalculatorPage() {
   return (
     <div className="page-container flex flex-col gap-8 py-10 sm:py-14">
       <Breadcrumbs items={[{ label: "Tools" }, { label: "Odds calculator" }]} />
+      <JsonLd data={faqJsonLd(calculatorFaq)} />
       <div className="flex flex-wrap items-start gap-12">
         <div className="flex min-w-0 flex-[999_1_480px] flex-col gap-6">
           <header className="flex max-w-3xl flex-col gap-3">

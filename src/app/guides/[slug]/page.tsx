@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleLayout } from "@/components/ArticleLayout";
+import { JsonLd } from "@/components/JsonLd";
 import { getGuide, guideEntries, robotsFor } from "@/content";
+import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
 /** Wait for the guide before responding, so unknown slugs get a real 404. */
 export const instant = false;
@@ -19,7 +21,13 @@ export async function generateMetadata({ params }: PageProps<"/guides/[slug]">):
     description: guide.description,
     alternates: { canonical: `/guides/${guide.slug}` },
     robots: robotsFor(guide.status),
-    openGraph: { title: guide.title, description: guide.description, type: "article", modifiedTime: guide.updated },
+    openGraph: {
+      title: guide.title,
+      description: guide.description,
+      type: "article",
+      modifiedTime: guide.updated,
+      images: defaultOgImages,
+    },
   };
 }
 
@@ -54,6 +62,9 @@ export default async function GuidePage({ params }: PageProps<"/guides/[slug]">)
         </nav>
       }
     >
+      <JsonLd
+        data={articleJsonLd({ path: `/guides/${guide.slug}`, title: guide.title, description: guide.description, updated: guide.updated })}
+      />
       <Body />
     </ArticleLayout>
   );

@@ -36,7 +36,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 4. Market pages, `/markets`, sitemap (done)
 5. Guides, platform reviews, calculator, advertise page (done; content in draft)
 6. Ads, affiliate redirects, newsletter route (done)
-7. SEO pass and deploy checklist
+7. SEO pass and deploy checklist (done; see [docs/DEPLOY.md](docs/DEPLOY.md))
 
 ## Market data notes
 - Polymarket: Gamma API `/markets/keyset`, top markets by 24h volume. Category comes from tags.

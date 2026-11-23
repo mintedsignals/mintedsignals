@@ -12,12 +12,10 @@ const staticPaths = [
   "/platforms",
   "/analysis",
   "/tools/odds-calculator",
-  "/glossary",
   "/advertise",
-  "/about",
   "/disclosure",
-  "/contact",
-  "/privacy",
+  // Add "/about", "/contact", "/privacy" and "/glossary" once those pages are written
+  // (they're placeholders marked noindex until then).
 ];
 
 const published = (e: { status: string }) => e.status === "published";

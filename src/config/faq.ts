@@ -1,4 +1,4 @@
-/** Questions and answers shown on the page. Phase 7 also publishes them as FAQPage data. */
+/** Questions and answers shown on the page. Also published as FAQPage JSON-LD. */
 export const calculatorFaq = [
   {
     q: "How do I convert a prediction market price to a probability?",

@@ -3,12 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AffiliateNote } from "@/components/AffiliateNote";
 import { ArticleLayout } from "@/components/ArticleLayout";
+import { JsonLd } from "@/components/JsonLd";
 import { goHref } from "@/config/partners";
 import { getReview, reviewEntries, robotsFor } from "@/content";
 import { platformCtaAllowed } from "@/lib/compliance";
 import { formatChance } from "@/lib/format";
 import { getHottestMarkets } from "@/lib/markets";
 import { marketPath } from "@/lib/markets/links";
+import { articleJsonLd, defaultOgImages } from "@/lib/seo";
 
 /** Wait for the review before responding, so unknown slugs get a real 404. */
 export const instant = false;
@@ -25,7 +27,13 @@ export async function generateMetadata({ params }: PageProps<"/platforms/[slug]"
     description: review.description,
     alternates: { canonical: `/platforms/${review.slug}` },
     robots: robotsFor(review.status),
-    openGraph: { title: review.title, description: review.description, type: "article", modifiedTime: review.updated },
+    openGraph: {
+      title: review.title,
+      description: review.description,
+      type: "article",
+      modifiedTime: review.updated,
+      images: defaultOgImages,
+    },
   };
 }
 
@@ -81,6 +89,9 @@ export default async function ReviewPage({ params }: PageProps<"/platforms/[slug
         </>
       }
     >
+      <JsonLd
+        data={articleJsonLd({ path: `/platforms/${review.slug}`, title: review.title, description: review.description, updated: review.updated })}
+      />
       <Body />
     </ArticleLayout>
   );

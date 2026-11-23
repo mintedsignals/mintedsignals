@@ -1,11 +1,14 @@
 import Link from "next/link";
+import { breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "./JsonLd";
 
 export type Crumb = { label: string; href?: string };
 
-/** Visible breadcrumb trail. The last crumb is the current page. */
+/** Visible breadcrumb trail plus its BreadcrumbList JSON-LD. The last crumb is the current page. */
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb" className="text-[13px] text-muted">
+      <JsonLd data={breadcrumbJsonLd(items)} />
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {items.map((item, i) => (
           <li key={i} className="flex min-w-0 items-center gap-2">
