@@ -73,6 +73,44 @@
   }
 }
 
+/* Odds ticker (src/components/layout/Ticker.tsx): slides left by one copy of the list, forever. */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-viewport {
+  /* Soft fade at both edges so items don't appear to be cut off */
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 48px), transparent);
+}
+
+.ticker-track {
+  animation: ticker-scroll 45s linear infinite;
+}
+
+.ticker-track:hover,
+.ticker-track:focus-within {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No movement: show one copy of the list and let it scroll sideways by hand instead. */
+  .ticker-track {
+    animation: none;
+  }
+  .ticker-track > [aria-hidden="true"] {
+    display: none;
+  }
+  .ticker-viewport {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}
+
 @layer components {
   /* Centred 1240px column with the design's 24px side padding */
   .page-container {
