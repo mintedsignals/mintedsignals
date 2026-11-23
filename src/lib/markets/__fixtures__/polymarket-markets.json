@@ -1,0 +1,398 @@
+{
+  "markets": [
+    {
+      "id": "561994",
+      "question": "Will Kristi Noem win the 2028 Republican presidential nomination?",
+      "slug": "will-kristi-noem-win-the-2028-republican-presidential-nomination",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.0015\", \"0.9985\"]",
+      "volume24hr": 1162851.305,
+      "volumeNum": 39140198.958599,
+      "endDate": "2028-11-08T04:59:00Z",
+      "tags": [
+        {
+          "slug": "primaries",
+          "label": "Primaries"
+        },
+        {
+          "slug": "parent-for-derivative",
+          "label": "Parent For Derivative"
+        },
+        {
+          "slug": "2028-election",
+          "label": "2028 Election"
+        },
+        {
+          "slug": "united-states",
+          "label": "United States"
+        },
+        {
+          "slug": "politics",
+          "label": "Politics"
+        },
+        {
+          "slug": "elections",
+          "label": "Elections"
+        },
+        {
+          "slug": "us-presidential-election",
+          "label": "US Election"
+        },
+        {
+          "slug": "world-elections",
+          "label": "World Elections"
+        },
+        {
+          "slug": "global-elections",
+          "label": "Global Elections"
+        },
+        {
+          "slug": "earn-4",
+          "label": "Earn 3.25%"
+        }
+      ],
+      "events": [
+        {
+          "id": "31875",
+          "slug": "republican-presidential-nominee-2028",
+          "title": "Republican Presidential Nominee 2028"
+        }
+      ]
+    },
+    {
+      "id": "562011",
+      "question": "Will Mike Johnson win the 2028 Republican presidential nomination?",
+      "slug": "will-mike-johnson-win-the-2028-republican-presidential-nomination",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.0005\", \"0.9995\"]",
+      "volume24hr": 77723.59,
+      "volumeNum": 1500877.804665,
+      "endDate": "2028-11-08T04:59:00Z",
+      "tags": [
+        {
+          "slug": "primaries",
+          "label": "Primaries"
+        },
+        {
+          "slug": "parent-for-derivative",
+          "label": "Parent For Derivative"
+        },
+        {
+          "slug": "2028-election",
+          "label": "2028 Election"
+        },
+        {
+          "slug": "united-states",
+          "label": "United States"
+        },
+        {
+          "slug": "politics",
+          "label": "Politics"
+        },
+        {
+          "slug": "elections",
+          "label": "Elections"
+        },
+        {
+          "slug": "us-presidential-election",
+          "label": "US Election"
+        },
+        {
+          "slug": "world-elections",
+          "label": "World Elections"
+        },
+        {
+          "slug": "global-elections",
+          "label": "Global Elections"
+        },
+        {
+          "slug": "earn-4",
+          "label": "Earn 3.25%"
+        }
+      ],
+      "events": [
+        {
+          "id": "31875",
+          "slug": "republican-presidential-nominee-2028",
+          "title": "Republican Presidential Nominee 2028"
+        }
+      ]
+    },
+    {
+      "id": "7079819",
+      "question": "Dota 2: PARIVISION vs Team Spirit - Game 2 Winner",
+      "slug": "dota2-pari-ts8-2026-11-16-game2",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"PARIVISION\", \"Team Spirit\"]",
+      "outcomePrices": "[\"0.0005\", \"0.9995\"]",
+      "volume24hr": 918598.0914970004,
+      "volumeNum": 913954.6514970001,
+      "endDate": "2026-11-17T00:00:00Z",
+      "tags": [
+        {
+          "slug": "esports",
+          "label": "Esports"
+        },
+        {
+          "slug": "dota-2",
+          "label": "Dota 2"
+        },
+        {
+          "slug": "games",
+          "label": "Games"
+        },
+        {
+          "slug": "sports",
+          "label": "Sports"
+        }
+      ],
+      "events": [
+        {
+          "id": "1397898",
+          "slug": "dota2-pari-ts8-2026-11-16",
+          "title": "Dota 2: PARIVISION vs Team Spirit (BO3) - 1win Essence Playoffs"
+        }
+      ]
+    },
+    {
+      "id": "6631817",
+      "question": "Germany vs. Netherlands: O/U 3.5",
+      "slug": "unl-ger-nld-2026-11-16-total-3pt5",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Over\", \"Under\"]",
+      "outcomePrices": "[\"0.3\", \"0.7\"]",
+      "oneDayPriceChange": -0.185,
+      "volume24hr": 650675.1155999999,
+      "volumeNum": 646472.2371179998,
+      "endDate": "2026-11-16T19:45:00Z",
+      "tags": [
+        {
+          "slug": "sports",
+          "label": "Sports"
+        },
+        {
+          "slug": "soccer",
+          "label": "Soccer"
+        },
+        {
+          "slug": "games",
+          "label": "Games"
+        },
+        {
+          "slug": "uefa-nations-league",
+          "label": "UEFA Nations League"
+        }
+      ],
+      "events": [
+        {
+          "id": "1307323",
+          "slug": "unl-ger-nld-2026-11-16-more-markets",
+          "title": "Germany vs. Netherlands - More Markets"
+        }
+      ]
+    },
+    {
+      "id": "6919847",
+      "question": "Will there be no new be CEO of NVIDIA by December 31, 2028?",
+      "slug": "will-candidate-a-be-the-next-ceo-of-nvidia",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.0895\", \"0.9105\"]",
+      "oneDayPriceChange": -0.0685,
+      "volume24hr": 1119949.776481,
+      "volumeNum": 2123500.638107,
+      "endDate": "2029-01-01T04:59:00Z",
+      "tags": [
+        {
+          "slug": "nvda",
+          "label": "NVDA"
+        },
+        {
+          "slug": "nvidia",
+          "label": "NVIDIA"
+        },
+        {
+          "slug": "pop-culture",
+          "label": "Culture"
+        },
+        {
+          "slug": "big-tech",
+          "label": "Big Tech"
+        },
+        {
+          "slug": "business",
+          "label": "Business"
+        },
+        {
+          "slug": "jensen-huang",
+          "label": "Jensen Huang"
+        }
+      ],
+      "events": [
+        {
+          "id": "1353337",
+          "slug": "next-ceo-of-nvidia",
+          "title": "Next CEO of NVIDIA?"
+        }
+      ]
+    },
+    {
+      "id": "701502",
+      "question": "Will Bitcoin dip to $45,000 by December 31, 2026?",
+      "slug": "will-bitcoin-dip-to-45000-by-december-31-2026-674-923-755-971-998-525-926-245-316-517-544-589-965-923-986-841-815-224-586-231-289-533-573",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.087\", \"0.913\"]",
+      "oneDayPriceChange": -0.0015,
+      "volume24hr": 77202.682725,
+      "volumeNum": 10068921.204142999,
+      "endDate": "2027-01-01T05:00:00Z",
+      "tags": [
+        {
+          "slug": "crypto",
+          "label": "Crypto"
+        },
+        {
+          "slug": "bitcoin",
+          "label": "Bitcoin"
+        },
+        {
+          "slug": "crypto-prices",
+          "label": "Crypto Prices"
+        },
+        {
+          "slug": "hit-price",
+          "label": "Hit Price"
+        },
+        {
+          "slug": "yearly",
+          "label": "Yearly"
+        },
+        {
+          "slug": "earn-4",
+          "label": "Earn 3.25%"
+        }
+      ],
+      "events": [
+        {
+          "id": "89502",
+          "slug": "what-price-will-bitcoin-hit-before-2027",
+          "title": "What price will Bitcoin hit in 2026?"
+        }
+      ]
+    },
+    {
+      "id": "3215007",
+      "question": "Will there be no change in Fed interest rates after the December 2026 meeting?",
+      "slug": "will-there-be-no-change-in-fed-interest-rates-after-the-december-2026-meeting-20260729232808635",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.0305\", \"0.9695\"]",
+      "oneDayPriceChange": -0.006,
+      "volume24hr": 265215.66222199996,
+      "volumeNum": 8669046.385605,
+      "endDate": "2026-12-09T23:59:00Z",
+      "tags": [
+        {
+          "slug": "fed",
+          "label": "Fed"
+        },
+        {
+          "slug": "fomc",
+          "label": "fomc"
+        },
+        {
+          "slug": "trump",
+          "label": "Trump"
+        },
+        {
+          "slug": "economy",
+          "label": "Economy"
+        },
+        {
+          "slug": "fed-rates",
+          "label": "Fed Rates"
+        },
+        {
+          "slug": "kevin-warsh",
+          "label": "Kevin Warsh"
+        },
+        {
+          "slug": "Global-Rates",
+          "label": "Global Rates"
+        },
+        {
+          "slug": "economic-policy",
+          "label": "Economic Policy"
+        },
+        {
+          "slug": "macro-indicators",
+          "label": "Macro Indicators"
+        },
+        {
+          "slug": "recurring",
+          "label": "Recurring"
+        }
+      ],
+      "events": [
+        {
+          "id": "770450",
+          "slug": "fed-decision-in-december-20260729232808632",
+          "title": "Fed Decision in December?"
+        }
+      ]
+    },
+    {
+      "id": "2293877",
+      "question": "Robert Pattinson announced as next James Bond?",
+      "slug": "robert-pattinson-announced-as-next-james-bond",
+      "active": true,
+      "closed": false,
+      "archived": false,
+      "outcomes": "[\"Yes\", \"No\"]",
+      "outcomePrices": "[\"0.9995\", \"0.0005\"]",
+      "oneDayPriceChange": 0.477,
+      "volume24hr": 148478.22644500004,
+      "volumeNum": 265877.47337300004,
+      "endDate": "2026-12-31T00:00:00Z",
+      "tags": [
+        {
+          "slug": "pop-culture",
+          "label": "Culture"
+        },
+        {
+          "slug": "celebrities",
+          "label": "Celebrities"
+        },
+        {
+          "slug": "movies",
+          "label": "Movies"
+        }
+      ],
+      "events": [
+        {
+          "id": "498879",
+          "slug": "next-james-bond-actor-398",
+          "title": "Next James Bond actor?"
+        }
+      ]
+    }
+  ],
+  "next_cursor": ""
+}

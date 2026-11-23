@@ -1,0 +1,165 @@
+{
+  "events": [
+    {
+      "category": "Economics",
+      "collateral_return_type": "MECNET",
+      "event_ticker": "KXFEDDECISION-26DEC",
+      "exchange_index": 0,
+      "last_updated_ts": "2026-11-13T01:45:27.378586Z",
+      "markets": [
+        {
+          "ticker": "KXFEDDECISION-26DEC-C26",
+          "event_ticker": "KXFEDDECISION-26DEC",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Cut >25bps",
+          "yes_bid_dollars": "0.0000",
+          "yes_ask_dollars": "0.0100",
+          "last_price_dollars": "0.0100",
+          "previous_price_dollars": "0.0100",
+          "volume_24h_fp": "187.03",
+          "close_time": "2026-12-09T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-26DEC-C25",
+          "event_ticker": "KXFEDDECISION-26DEC",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Cut 25bps",
+          "yes_bid_dollars": "0.0000",
+          "yes_ask_dollars": "0.0100",
+          "last_price_dollars": "0.0100",
+          "previous_price_dollars": "0.0100",
+          "volume_24h_fp": "23098.81",
+          "close_time": "2026-12-09T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-26DEC-H0",
+          "event_ticker": "KXFEDDECISION-26DEC",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Fed maintains rate",
+          "yes_bid_dollars": "0.0400",
+          "yes_ask_dollars": "0.0500",
+          "last_price_dollars": "0.0400",
+          "previous_price_dollars": "0.0400",
+          "volume_24h_fp": "389174.82",
+          "close_time": "2026-12-09T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-26DEC-H25",
+          "event_ticker": "KXFEDDECISION-26DEC",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Hike 25bps",
+          "yes_bid_dollars": "0.9000",
+          "yes_ask_dollars": "0.9200",
+          "last_price_dollars": "0.9200",
+          "previous_price_dollars": "0.8800",
+          "volume_24h_fp": "53516.33",
+          "close_time": "2026-12-09T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-26DEC-H26",
+          "event_ticker": "KXFEDDECISION-26DEC",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Hike >25bps",
+          "yes_bid_dollars": "0.0500",
+          "yes_ask_dollars": "0.0600",
+          "last_price_dollars": "0.0600",
+          "previous_price_dollars": "0.1100",
+          "volume_24h_fp": "240514.08",
+          "close_time": "2026-12-09T18:59:00Z"
+        }
+      ],
+      "mutually_exclusive": true,
+      "series_ticker": "KXFEDDECISION",
+      "strike_date": "2026-12-09T19:00:00Z",
+      "strike_period": "",
+      "sub_title": "On Dec 9, 2026",
+      "title": "Fed decision in Dec 2026?"
+    },
+    {
+      "category": "Economics",
+      "collateral_return_type": "MECNET",
+      "event_ticker": "KXFEDDECISION-27JAN",
+      "exchange_index": 0,
+      "last_updated_ts": "2026-11-13T01:45:26.119303Z",
+      "markets": [
+        {
+          "ticker": "KXFEDDECISION-27JAN-C26",
+          "event_ticker": "KXFEDDECISION-27JAN",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Cut >25bps",
+          "yes_bid_dollars": "0.0000",
+          "yes_ask_dollars": "0.0100",
+          "last_price_dollars": "0.0100",
+          "previous_price_dollars": "0.0100",
+          "volume_24h_fp": "0.00",
+          "close_time": "2027-01-27T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-27JAN-C25",
+          "event_ticker": "KXFEDDECISION-27JAN",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Cut 25bps",
+          "yes_bid_dollars": "0.0100",
+          "yes_ask_dollars": "0.0200",
+          "last_price_dollars": "0.0100",
+          "previous_price_dollars": "0.0100",
+          "volume_24h_fp": "211.86",
+          "close_time": "2027-01-27T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-27JAN-H0",
+          "event_ticker": "KXFEDDECISION-27JAN",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Fed maintains rate",
+          "yes_bid_dollars": "0.3400",
+          "yes_ask_dollars": "0.3500",
+          "last_price_dollars": "0.3800",
+          "previous_price_dollars": "0.3900",
+          "volume_24h_fp": "958.79",
+          "close_time": "2027-01-27T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-27JAN-H25",
+          "event_ticker": "KXFEDDECISION-27JAN",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Hike 25bps",
+          "yes_bid_dollars": "0.6100",
+          "yes_ask_dollars": "0.6400",
+          "last_price_dollars": "0.6400",
+          "previous_price_dollars": "0.6100",
+          "volume_24h_fp": "813.72",
+          "close_time": "2027-01-27T18:59:00Z"
+        },
+        {
+          "ticker": "KXFEDDECISION-27JAN-H26",
+          "event_ticker": "KXFEDDECISION-27JAN",
+          "market_type": "binary",
+          "status": "active",
+          "yes_sub_title": "Hike >25bps",
+          "yes_bid_dollars": "0.0100",
+          "yes_ask_dollars": "0.0300",
+          "last_price_dollars": "0.0100",
+          "previous_price_dollars": "0.0200",
+          "volume_24h_fp": "751.89",
+          "close_time": "2027-01-27T18:59:00Z"
+        }
+      ],
+      "mutually_exclusive": true,
+      "series_ticker": "KXFEDDECISION",
+      "strike_date": "2027-01-27T19:00:00Z",
+      "strike_period": "",
+      "sub_title": "On Jan 27, 2027",
+      "title": "Fed decision in Jan 2027?"
+    }
+  ],
+  "cursor": ""
+}
