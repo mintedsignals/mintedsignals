@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AdNetworkScript } from "@/components/ads/AdSlot";
+import { Analytics } from "@/components/analytics/Analytics";
 import { LeaderboardBand } from "@/components/layout/LeaderboardBand";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Ticker, TickerFrame } from "@/components/layout/Ticker";
+import { GA_MEASUREMENT_ID } from "@/config/analytics";
 import { site } from "@/config/site";
+import { consentDefaultsScript } from "@/lib/analytics";
 import "./globals.css";
 
 // Self-hosted at build time by next/font: no requests to Google from the browser.
@@ -39,6 +42,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
+      {GA_MEASUREMENT_ID && (
+        <head>
+          {/* Consent Mode defaults: must run before Google's tag loads (see src/lib/analytics.ts). */}
+          <script dangerouslySetInnerHTML={{ __html: consentDefaultsScript() }} />
+        </head>
+      )}
       <body className="flex min-h-full flex-col">
         <Suspense fallback={<TickerFrame />}>
           <Ticker />
@@ -50,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <SiteFooter />
         <AdNetworkScript />
+        {GA_MEASUREMENT_ID && <Analytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useId, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 type State = { kind: "idle" } | { kind: "sending" } | { kind: "done" } | { kind: "error"; message: string };
 
@@ -22,7 +23,12 @@ export function NewsletterForm() {
         body: JSON.stringify({ email: form.get("email"), website: form.get("website"), source: pathname }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      setState(res.ok && data.ok ? { kind: "done" } : { kind: "error", message: data.error ?? "Something went wrong. Please try again." });
+      if (res.ok && data.ok) {
+        trackEvent("sign_up", { method: "newsletter", page_path: pathname });
+        setState({ kind: "done" });
+      } else {
+        setState({ kind: "error", message: data.error ?? "Something went wrong. Please try again." });
+      }
     } catch {
       setState({ kind: "error", message: "Couldn't connect. Please try again." });
     }

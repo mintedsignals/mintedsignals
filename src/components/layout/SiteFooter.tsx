@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CookieSettingsLink } from "@/components/analytics/CookieSettingsLink";
+import { GA_MEASUREMENT_ID } from "@/config/analytics";
 import { complianceNotice, footerNav, site } from "@/config/site";
 
 export function SiteFooter() {
@@ -20,6 +22,7 @@ export function SiteFooter() {
                     {link.label}
                   </Link>
                 ))}
+                {column.heading === "Company" && GA_MEASUREMENT_ID && <CookieSettingsLink />}
               </div>
             ))}
           </nav>
