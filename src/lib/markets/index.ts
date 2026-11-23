@@ -6,7 +6,7 @@ import { selectHottest, type HottestOptions } from "./hottest";
 import { getJson } from "./http";
 import { fetchKalshiMarket, fetchKalshiMarkets } from "./kalshi";
 import { fetchPolymarketMarket, fetchPolymarketMarkets } from "./polymarket";
-import { tickerFromKalshiSlug } from "./slug";
+import { marketSlug, tickerFromKalshiSlug } from "./slug";
 import { buildSnapshot, snapshotFromLastGood, type LastGood } from "./snapshot";
 import { toSummary, venues, type Market, type MarketSummary, type MarketsSnapshot, type Venue } from "./types";
 
@@ -129,4 +129,21 @@ export async function getRelatedMarkets(
 export async function getTopMarketParams(limit: number): Promise<{ venue: Venue; slug: string }[]> {
   const { markets } = await getMarketsSnapshot();
   return selectHottest(markets, { limit, onePerEvent: false }).map((m) => ({ venue: m.venue, slug: m.slug }));
+}
+
+/**
+ * One market by its id ("kalshi:KXFED-26DEC-H0"), for /go redirects. Uses the snapshot,
+ * then asks the venue (e.g. for a market that has closed since the snapshot).
+ */
+export async function getMarketById(id: string): Promise<Market | null> {
+  const i = id.indexOf(":");
+  const venue = id.slice(0, i);
+  const nativeId = id.slice(i + 1);
+  if (i === -1) return null;
+  if (!venue || !nativeId || !isVenue(venue)) return null;
+  const { markets } = await getMarketsSnapshot();
+  const known = markets.find((m) => m.id === id);
+  if (known) return known;
+  // loadMarket reads the id from the end of a slug, so any question words will do.
+  return loadMarket(venue, marketSlug("market", nativeId));
 }

@@ -1,3 +1,5 @@
+import { goHref } from "@/config/partners";
+
 /**
  * Homepage copy from the approved design. Bracketed values are placeholders the brief
  * says to keep until real figures exist. Don't fill them with guesses.
@@ -8,7 +10,7 @@ export type PlatformCard = {
   badge: string;
   badgeClass: string;
   facts: { label: string; value: string }[];
-  /** Affiliate CTA. Direct venue URLs until phase 6 routes them through /go/[partner]. */
+  /** Affiliate CTA: always a /go link (see src/config/partners.ts), or null for no link yet. */
   cta: { label: string; href: string | null; primary?: boolean };
   reviewHref: string | null;
   placeholder?: boolean;
@@ -25,7 +27,7 @@ export const platformCards: PlatformCard[] = [
       { label: "Fees", value: "[FEE]" },
       { label: "Availability", value: "[CHECK REGIONS]" },
     ],
-    cta: { label: "Visit Polymarket", href: "https://polymarket.com/" },
+    cta: { label: "Visit Polymarket", href: goHref("polymarket") },
     reviewHref: "/platforms/polymarket",
   },
   {
@@ -38,7 +40,7 @@ export const platformCards: PlatformCard[] = [
       { label: "Fees", value: "[FEE]" },
       { label: "Availability", value: "[CHECK REGIONS]" },
     ],
-    cta: { label: "Visit Kalshi", href: "https://kalshi.com/" },
+    cta: { label: "Visit Kalshi", href: goHref("kalshi") },
     reviewHref: "/platforms/kalshi",
   },
   {

@@ -6,6 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { MarketRow, MarketRowHeader } from "@/components/markets/MarketRow";
 import { VenueBadge } from "@/components/markets/VenueBadge";
 import { MARKETS_REVALIDATE_SECONDS } from "@/config/markets";
+import { goHref } from "@/config/partners";
 import { categoryHref } from "@/config/site";
 import { platformCtaAllowed } from "@/lib/compliance";
 import { changeTone, formatChance, formatChange, formatDate, formatTimeUtc, formatVolume } from "@/lib/format";
@@ -176,7 +177,7 @@ export default async function MarketPage({ params }: PageProps<"/markets/[venue]
                 : `This market has closed, but ${venue} lists similar markets.`}
             </p>
             <a
-              href={market.url}
+              href={goHref(market.venue, market.id)}
               rel="sponsored noopener"
               className="rounded-control bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-white no-underline hover:bg-link hover:text-white"
             >

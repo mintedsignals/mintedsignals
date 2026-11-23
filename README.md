@@ -25,7 +25,9 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 - `src/lib/markets/`: market data layer. Server only; import from `@/lib/markets` (`getMarketsSnapshot`, `getHottestMarkets`, `getMarket`)
 - `src/content/`: guides, reviews and analysis as MDX, listed in `src/content/index.ts`
 - `src/mdx-components.tsx`: MDX styles and the `<Check>`, `<Callout>` and `<OddsCalculator>` components
-- `src/components/ads/AdSlot.tsx`: fixed-size ad slots (placeholder in dev, nothing in production until zone IDs are set)
+- `src/components/ads/`: fixed-size ad slots (placeholder in dev, nothing in production until zone IDs are set); `AdZone.tsx` is the one place to match to the ad network's tag code
+- `src/config/partners.ts`: affiliate partners, base URLs and tracking params; all partner links go through `/go/[partner]?m=<market-id>`
+- `src/lib/newsletter/`: newsletter provider interface; pick a provider with `NEWSLETTER_PROVIDER`
 
 ## Phases
 1. Scaffold, design tokens, layout, header and footer (done)
@@ -33,7 +35,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 3. Homepage with live data (done)
 4. Market pages, `/markets`, sitemap (done)
 5. Guides, platform reviews, calculator, advertise page (done; content in draft)
-6. Ads, affiliate redirects, newsletter route
+6. Ads, affiliate redirects, newsletter route (done)
 7. SEO pass and deploy checklist
 
 ## Market data notes

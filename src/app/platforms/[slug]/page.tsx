@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AffiliateNote } from "@/components/AffiliateNote";
 import { ArticleLayout } from "@/components/ArticleLayout";
+import { goHref } from "@/config/partners";
 import { getReview, reviewEntries, robotsFor } from "@/content";
 import { platformCtaAllowed } from "@/lib/compliance";
 import { formatChance } from "@/lib/format";
@@ -11,9 +12,6 @@ import { marketPath } from "@/lib/markets/links";
 
 /** Wait for the review before responding, so unknown slugs get a real 404. */
 export const instant = false;
-
-/** Venue homepages until phase 6 routes these through /go/[partner]. */
-const venueUrls = { polymarket: "https://polymarket.com/", kalshi: "https://kalshi.com/" } as const;
 
 export function generateStaticParams() {
   return reviewEntries.map((r) => ({ slug: r.slug }));
@@ -53,7 +51,7 @@ export default async function ReviewPage({ params }: PageProps<"/platforms/[slug
               <h2 className="font-display text-lg font-bold">Visit {review.name}</h2>
               <p className="text-sm text-body">Check that {review.name} is available where you live before signing up.</p>
               <a
-                href={venueUrls[review.venue]}
+                href={goHref(review.venue)}
                 rel="sponsored noopener"
                 className="rounded-control bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-white no-underline hover:bg-link hover:text-white"
               >

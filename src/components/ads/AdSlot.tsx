@@ -1,12 +1,19 @@
+import Script from "next/script";
+import { AdZone } from "./AdZone";
+
 /**
  * Ad slot that reserves its exact size up front, so nothing shifts when an ad loads.
  *
- * Phase 1: reserves space and shows a labelled placeholder in development.
- * Phase 6 adds the network script (loaded lazily) and per-size zone IDs from env vars.
- * With no zone ID set, the slot renders nothing in production.
+ * - Zone IDs come from env vars, one per size (see .env.example).
+ * - No zone ID: a labelled placeholder in development, nothing at all in production.
+ * - With a zone ID: a visible "Advertisement" label (its height is reserved too) and the
+ *   network's zone markup from AdZone.tsx. The network script itself is loaded once per
+ *   page by <AdNetworkScript />, lazily, after the page has finished loading.
  */
 
 export type AdSize = "728x90" | "300x250" | "300x600" | "native";
+
+const LABEL_HEIGHT = 18;
 
 const SLOTS: Record<AdSize, { width: string; height: number; label: string; envVar: string }> = {
   "728x90": {
@@ -39,11 +46,22 @@ function zoneId(size: AdSize): string | undefined {
   }
 }
 
+const AD_SCRIPT_URL = process.env.NEXT_PUBLIC_AD_SCRIPT_URL || undefined;
 const isDev = process.env.NODE_ENV !== "production";
 
 /** True when a slot of this size will render (a placeholder in dev, or a configured zone). */
 export function adSlotVisible(size: AdSize): boolean {
   return isDev || Boolean(zoneId(size));
+}
+
+/**
+ * The ad network's script, once per page, loaded when the browser is idle after the page
+ * has loaded (strategy "lazyOnload"), so it never delays the main content.
+ */
+export function AdNetworkScript() {
+  const anyZone = (Object.keys(SLOTS) as AdSize[]).some((s) => zoneId(s));
+  if (!AD_SCRIPT_URL || !anyZone) return null;
+  return <Script id="ad-network" src={AD_SCRIPT_URL} strategy="lazyOnload" />;
 }
 
 export function AdSlot({
@@ -61,14 +79,9 @@ export function AdSlot({
   const slot = SLOTS[size];
   const zone = zoneId(size);
 
-  return (
-    <div
-      className={`max-w-full shrink-0 ${className}`}
-      style={{ width: slot.width, height: slot.height }}
-      data-ad-size={size}
-      data-ad-zone={zone}
-    >
-      {!zone && (
+  if (!zone) {
+    return (
+      <div className={`max-w-full shrink-0 ${className}`} style={{ width: slot.width, height: slot.height }} data-ad-size={size}>
         <div
           className={`flex h-full w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line-dashed ${
             tone === "white" ? "bg-white" : "bg-surface"
@@ -78,7 +91,25 @@ export function AdSlot({
           <span className="text-[13px] text-muted">{slot.label}</span>
           <span className="sr-only">Development placeholder. Set {slot.envVar} to enable.</span>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`max-w-full shrink-0 ${className}`}
+      style={{ width: slot.width, height: slot.height + LABEL_HEIGHT }}
+      data-ad-size={size}
+    >
+      <span
+        className="block font-mono text-[10px] tracking-[0.1em] text-muted"
+        style={{ height: LABEL_HEIGHT, lineHeight: `${LABEL_HEIGHT}px` }}
+      >
+        {size === "native" ? "SPONSORED" : "ADVERTISEMENT"}
+      </span>
+      <div className="overflow-hidden" style={{ width: "100%", height: slot.height }}>
+        <AdZone size={size} zoneId={zone} width={slot.width} height={slot.height} />
+      </div>
     </div>
   );
 }
