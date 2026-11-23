@@ -28,7 +28,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 ## Phases
 1. Scaffold, design tokens, layout, header and footer (done)
 2. Market data layer (Polymarket and Kalshi), with tests (done)
-3. Homepage with live data
+3. Homepage with live data (done)
 4. Market pages, `/markets`, sitemap
 5. Guides, platform reviews, calculator, advertise page
 6. Ads, affiliate redirects, newsletter route
@@ -38,4 +38,6 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 - Polymarket: Gamma API `/markets/keyset`, top markets by 24h volume. Category comes from tags.
 - Kalshi: only the series listed in `src/config/markets.ts` (Kalshi can't sort by volume and has 12,000+ open events). Requests go three at a time, with retries on 429, because Kalshi rate-limits public traffic per IP.
 - Kalshi 24h volume is in contracts, counted as $1 each, so it is approximate next to Polymarket's dollar volume.
+- `POLYMARKET_API_BASE` / `KALSHI_API_BASE` override the API hosts (testing, or Kalshi's demo environment).
+- Market pages use our own slugs, `<question words>--<venue id>`, because venue slugs aren't reliably readable.
 - Data is cached for 60 seconds. If a venue fails, its last good data is served (kept in server memory per instance).

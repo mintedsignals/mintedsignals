@@ -8,10 +8,11 @@
  */
 import type { Category } from "@/config/site";
 import { categoryFromKalshi } from "./categories";
-import { kalshiSlug } from "./slug";
+import { marketSlug } from "./slug";
 import type { Market } from "./types";
 
-export const KALSHI_BASE = "https://external-api.kalshi.com/trade-api/v2";
+/** Overridable for testing or Kalshi's demo environment (https://external-api.demo.kalshi.co/trade-api/v2). */
+export const KALSHI_BASE = process.env.KALSHI_API_BASE || "https://external-api.kalshi.com/trade-api/v2";
 
 export interface KalshiMarket {
   ticker?: string;
@@ -82,7 +83,7 @@ export function normalizeKalshiMarket(
     id: `kalshi:${m.ticker}`,
     venue: "kalshi",
     question,
-    slug: kalshiSlug(question, m.ticker),
+    slug: marketSlug(question, m.ticker),
     category: options.category ?? categoryFromKalshi(event.category),
     yesPrice,
     yesOutcome: "Yes",
@@ -126,7 +127,13 @@ export async function fetchKalshiSeries(getJson: GetJson, seriesTicker: string, 
   return markets.filter((m) => m.isOpen);
 }
 
-/** Fetch several series a few at a time. Fails only if every series fails. */
+/**
+ * Share of series that may fail before the whole Kalshi fetch counts as failed (and the last
+ * good data is used instead). A few failures are normal: Kalshi rate-limits public traffic.
+ */
+export const KALSHI_MAX_FAILED_SHARE = 0.25;
+
+/** Fetch several series a few at a time. Throws if more than a quarter of them fail. */
 export async function fetchKalshiMarkets(
   getJson: GetJson,
   series: { ticker: string; category: Category }[],
@@ -142,12 +149,12 @@ export async function fetchKalshiMarkets(
   );
   if (failed.length > 0) console.warn(`[markets] Kalshi series failed: ${failed.join(", ")}`);
 
-  const ok = results.filter((r): r is PromiseFulfilledResult<Market[]> => r.status === "fulfilled");
-  if (series.length > 0 && ok.length === 0) {
+  if (series.length > 0 && failed.length > series.length * KALSHI_MAX_FAILED_SHARE) {
     const first = results.find((r): r is PromiseRejectedResult => r.status === "rejected");
-    throw first?.reason instanceof Error ? first.reason : new Error("All Kalshi series requests failed");
+    const reason = first?.reason instanceof Error ? first.reason.message : String(first?.reason);
+    throw new Error(`${failed.length}/${series.length} Kalshi series failed (${reason})`);
   }
-  return ok.flatMap((r) => r.value);
+  return results.flatMap((r) => (r.status === "fulfilled" ? r.value : []));
 }
 
 /** One market by ticker (open or closed), with its event for the question and category. */

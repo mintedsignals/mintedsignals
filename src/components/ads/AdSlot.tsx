@@ -46,7 +46,16 @@ export function adSlotVisible(size: AdSize): boolean {
   return isDev || Boolean(zoneId(size));
 }
 
-export function AdSlot({ size, className = "" }: { size: AdSize; className?: string }) {
+export function AdSlot({
+  size,
+  className = "",
+  tone = "white",
+}: {
+  size: AdSize;
+  className?: string;
+  /** Placeholder background: white on grey bands, surface grey on white pages (as in the design). */
+  tone?: "white" | "surface";
+}) {
   if (!adSlotVisible(size)) return null;
 
   const slot = SLOTS[size];
@@ -60,7 +69,11 @@ export function AdSlot({ size, className = "" }: { size: AdSize; className?: str
       data-ad-zone={zone}
     >
       {!zone && (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line-dashed bg-white">
+        <div
+          className={`flex h-full w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line-dashed ${
+            tone === "white" ? "bg-white" : "bg-surface"
+          }`}
+        >
           <span className="font-mono text-[11px] tracking-[0.1em] text-muted">ADVERTISEMENT</span>
           <span className="text-[13px] text-muted">{slot.label}</span>
           <span className="sr-only">Development placeholder. Set {slot.envVar} to enable.</span>

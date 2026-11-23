@@ -5,9 +5,11 @@
  * about a quarter of markets; the category field is empty, so we map from tags.
  */
 import { categoryFromPolymarketTags } from "./categories";
+import { idFromPolymarketSlug, marketSlug } from "./slug";
 import type { Market } from "./types";
 
-export const GAMMA_BASE = "https://gamma-api.polymarket.com";
+/** Overridable for testing (e.g. a local proxy). */
+export const GAMMA_BASE = process.env.POLYMARKET_API_BASE || "https://gamma-api.polymarket.com";
 export const KEYSET_PAGE_SIZE = 100; // documented maximum for /markets/keyset
 
 /** The fields we read from a Gamma market. Everything is optional: never trust the shape. */
@@ -68,7 +70,7 @@ export function normalizePolymarketMarket(m: GammaMarket): Market | null {
     id: `polymarket:${m.id}`,
     venue: "polymarket",
     question: m.question.trim(),
-    slug: m.slug,
+    slug: marketSlug(m.question, m.id),
     category: categoryFromPolymarketTags((m.tags ?? []).map((t) => t.slug ?? "")),
     yesPrice,
     yesOutcome: outcomes[yesIndex],
@@ -109,9 +111,10 @@ export async function fetchPolymarketMarkets(getJson: GetJson, max: number): Pro
   return markets.slice(0, max);
 }
 
-/** One market by its Polymarket slug (open or closed). Null if it doesn't exist. */
+/** One market by our slug (open or closed). Null if it doesn't exist. */
 export async function fetchPolymarketMarket(getJson: GetJson, slug: string): Promise<Market | null> {
-  const params = new URLSearchParams({ include_tag: "true" });
-  const m = await getJson<GammaMarket>(`${GAMMA_BASE}/markets/slug/${encodeURIComponent(slug)}?${params}`);
+  const id = idFromPolymarketSlug(slug);
+  if (!id) return null;
+  const m = await getJson<GammaMarket>(`${GAMMA_BASE}/markets/${id}?include_tag=true`);
   return m ? normalizePolymarketMarket(m) : null;
 }

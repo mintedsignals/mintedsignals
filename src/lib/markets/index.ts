@@ -7,7 +7,7 @@ import { fetchKalshiMarket, fetchKalshiMarkets } from "./kalshi";
 import { fetchPolymarketMarket, fetchPolymarketMarkets } from "./polymarket";
 import { tickerFromKalshiSlug } from "./slug";
 import { buildSnapshot, snapshotFromLastGood, type LastGood } from "./snapshot";
-import type { Market, MarketsSnapshot, Venue } from "./types";
+import { venues, type Market, type MarketsSnapshot, type Venue } from "./types";
 
 export type { Market, MarketsSnapshot, Venue } from "./types";
 export { venueNames, venues } from "./types";
@@ -42,9 +42,12 @@ async function loadSnapshot(): Promise<MarketsSnapshot> {
     lastGood,
   );
 
-  // Nothing fresh and nothing saved: throw rather than cache an empty snapshot.
-  if (freshVenues === 0 && snapshot.markets.length === 0) {
-    throw new Error(`Market data unavailable: ${JSON.stringify(snapshot.venues)}`);
+  // A venue with no data at all (failed, and nothing saved in this process): throw rather
+  // than cache a snapshot missing that venue. Next.js then keeps serving the previous
+  // page, which still has it (checked on a production build with the APIs returning 503).
+  const missing = venues.filter((v) => snapshot.venues[v].status === "unavailable");
+  if (missing.length > 0) {
+    throw new Error(`Market data unavailable (${freshVenues} fresh): ${JSON.stringify(snapshot.venues)}`);
   }
   return snapshot;
 }

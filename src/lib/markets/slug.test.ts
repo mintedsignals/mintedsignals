@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { categoryFromKalshi, categoryFromPolymarketTags } from "./categories";
-import { kalshiSlug, slugify, tickerFromKalshiSlug } from "./slug";
+import { idFromPolymarketSlug, marketSlug, slugify, tickerFromKalshiSlug } from "./slug";
 
 describe("slugify", () => {
   it("makes readable URL slugs", () => {
@@ -16,10 +16,17 @@ describe("slugify", () => {
   });
 });
 
-describe("Kalshi slugs", () => {
+describe("market slugs", () => {
+  it("round-trips Polymarket ids and rejects non-numeric ones", () => {
+    expect(marketSlug("Will Bitcoin hit $100k?", "561994")).toBe("will-bitcoin-hit-100k--561994");
+    expect(idFromPolymarketSlug("will-bitcoin-hit-100k--561994")).toBe("561994");
+    expect(idFromPolymarketSlug("will-candidate-a-be-the-next-ceo")).toBeNull();
+    expect(idFromPolymarketSlug("question--abc")).toBeNull();
+  });
+
   it("round-trips the ticker, including tickers with dots", () => {
     for (const ticker of ["KXFEDDECISION-26DEC-H0", "KXBTCD-26NOV1617-T95999.99"]) {
-      expect(tickerFromKalshiSlug(kalshiSlug("Some question?", ticker))).toBe(ticker);
+      expect(tickerFromKalshiSlug(marketSlug("Some question?", ticker))).toBe(ticker);
     }
   });
 

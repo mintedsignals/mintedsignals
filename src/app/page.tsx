@@ -1,12 +1,17 @@
-import { PagePlaceholder } from "@/components/PagePlaceholder";
+import { AdvertiseBand } from "@/components/home/AdvertiseBand";
+import { AnalysisSection } from "@/components/home/AnalysisSection";
+import { GuidesSection } from "@/components/home/GuidesSection";
+import { Hero } from "@/components/home/Hero";
+import { PlatformsSection } from "@/components/home/PlatformsSection";
 
 export default function HomePage() {
   return (
-    <PagePlaceholder
-      eyebrow="PREDICTION MARKETS, DECODED"
-      title="What the crowd is betting on, and what it means."
-      intro="Live odds from Polymarket and Kalshi, plain-English guides, and analysis of the markets moving the most each day."
-      phase={3}
-    />
+    <>
+      <Hero />
+      <PlatformsSection />
+      <GuidesSection />
+      <AnalysisSection />
+      <AdvertiseBand />
+    </>
   );
 }

@@ -92,14 +92,27 @@ describe("fetchKalshiMarkets", () => {
     { ticker: "KXBROKEN", category: "Other" as const },
   ];
 
-  it("keeps the series that worked when one fails", async () => {
+  const many = [
+    ...series,
+    ...["KXA", "KXB", "KXC"].map((ticker) => ({ ticker, category: "Other" as const })),
+  ];
+
+  it("keeps the series that worked when a few fail (1 of 5)", async () => {
     const getJson = async <T,>(url: string) => {
       if (url.includes("KXBROKEN")) throw new Error("500 from api");
-      return { events, cursor: "" } as T;
+      return (url.includes("KXFEDDECISION") ? { events, cursor: "" } : { events: [], cursor: "" }) as T;
     };
-    const result = await fetchKalshiMarkets(getJson, series);
+    const result = await fetchKalshiMarkets(getJson, many);
     expect(result.length).toBeGreaterThan(0);
     expect(result.every((m) => m.id.startsWith("kalshi:KXFEDDECISION"))).toBe(true);
+  });
+
+  it("throws when more than a quarter of series fail, so the last good data is used", async () => {
+    const getJson = async <T,>(url: string) => {
+      if (url.includes("KXBROKEN") || url.includes("KXA")) throw new Error("503 from api");
+      return { events, cursor: "" } as T;
+    };
+    await expect(fetchKalshiMarkets(getJson, many)).rejects.toThrow("2/5 Kalshi series failed");
   });
 
   it("throws when every series fails, so the caller falls back", async () => {

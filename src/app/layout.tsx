@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { LeaderboardBand } from "@/components/layout/LeaderboardBand";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { Ticker } from "@/components/layout/Ticker";
+import { Ticker, TickerFrame } from "@/components/layout/Ticker";
 import { site } from "@/config/site";
 import "./globals.css";
 
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <Ticker />
+        <Suspense fallback={<TickerFrame />}>
+          <Ticker />
+        </Suspense>
         <SiteHeader />
         <LeaderboardBand />
         <main id="main" className="flex-1">

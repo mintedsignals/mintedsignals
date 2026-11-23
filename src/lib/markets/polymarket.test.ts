@@ -23,7 +23,7 @@ describe("normalizePolymarketMarket (real API sample)", () => {
     const source = raw.find((r) => r.question === m.question)!;
     expect(m.id).toBe(`polymarket:${source.id}`);
     expect(m.venue).toBe("polymarket");
-    expect(m.slug).toBe(source.slug);
+    expect(m.slug).toBe(`will-there-be-no-new-be-ceo-of-nvidia-by-december-31-2028--${source.id}`);
     expect(m.yesOutcome).toBe("Yes");
     expect(m.yesPrice).toBe(JSON.parse(source.outcomePrices!).map(Number)[0]);
     expect(m.change24h).toBe(-0.0685);
