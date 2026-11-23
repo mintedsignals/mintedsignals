@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import worker, { type Env } from "./index";
+import worker, { REBUILD_WORKFLOW_URL, triggerRebuild, type Env } from "./index";
 
 const env: Env = { ASSETS: { fetch: async () => new Response("static file", { status: 200 }) } };
 const call = (path: string, init?: RequestInit, e: Env = env) =>
@@ -58,5 +58,35 @@ describe("/api/newsletter", () => {
     expect((await post({ email: "nope" })).status).toBe(400);
     expect((await post({ email: "a@b.co", website: "spam" })).status).toBe(200);
     expect((await call("/api/newsletter")).status).toBe(405);
+  });
+});
+
+describe("rebuild timer", () => {
+  const calls: { url: string; init: RequestInit }[] = [];
+  const fakeFetch = (status: number) =>
+    (async (url: string, init: RequestInit) => {
+      calls.push({ url, init });
+      return new Response(status === 204 ? null : "nope", { status });
+    }) as unknown as typeof fetch;
+
+  it("asks GitHub to run the workflow on main", async () => {
+    calls.length = 0;
+    const ok = await triggerRebuild({ ...env, GITHUB_DISPATCH_TOKEN: "test-token" }, fakeFetch(204));
+    expect(ok).toBe(true);
+    expect(calls[0].url).toBe(REBUILD_WORKFLOW_URL);
+    expect(calls[0].init.method).toBe("POST");
+    expect((calls[0].init.headers as Record<string, string>).Authorization).toBe("Bearer test-token");
+    expect(JSON.parse(calls[0].init.body as string)).toEqual({ ref: "main" });
+  });
+
+  it("skips without a token and survives GitHub errors", async () => {
+    calls.length = 0;
+    expect(await triggerRebuild(env, fakeFetch(204))).toBe(false);
+    expect(calls).toHaveLength(0);
+    expect(await triggerRebuild({ ...env, GITHUB_DISPATCH_TOKEN: "t" }, fakeFetch(401))).toBe(false);
+    const throwing = (async () => {
+      throw new Error("network down");
+    }) as unknown as typeof fetch;
+    expect(await triggerRebuild({ ...env, GITHUB_DISPATCH_TOKEN: "t" }, throwing)).toBe(false);
   });
 });

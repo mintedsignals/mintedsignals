@@ -8,6 +8,10 @@
  *
  *   GET  /go/<partner>?m=<market id>&to=<market page>   affiliate redirect, logged
  *   POST /api/newsletter                                 newsletter signup
+ *
+ * It also has a scheduled handler: every 30 minutes (triggers.crons in wrangler.jsonc) it asks
+ * GitHub to run the "Rebuild and deploy" workflow, which fetches fresh odds and redeploys the
+ * site. Cloudflare's timer is punctual; GitHub's own schedule only runs as a slower backup.
  */
 import { isPartnerId, partners } from "../src/config/partners";
 import { buildPartnerUrl, logClick, parseMarketId } from "../src/lib/affiliate";
@@ -18,7 +22,16 @@ export interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
   /** Newsletter provider name; unset means "signups aren't open yet". */
   NEWSLETTER_PROVIDER?: string;
+  /**
+   * Worker secret: a GitHub fine-grained token for this repo with "Actions: read and write",
+   * used only to start the rebuild workflow. Set in the dashboard, never in the repo.
+   */
+  GITHUB_DISPATCH_TOKEN?: string;
 }
+
+/** The workflow the timer starts (.github/workflows/deploy.yml). */
+export const REBUILD_WORKFLOW_URL =
+  "https://api.github.com/repos/mintedsignals/mintedsignals/actions/workflows/deploy.yml/dispatches";
 
 const worker = {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -27,7 +40,45 @@ const worker = {
     if (url.pathname === "/api/newsletter") return handleNewsletter(request, env);
     return env.ASSETS.fetch(request);
   },
+
+  /** Cloudflare cron trigger: start the rebuild (see the note at the top). */
+  async scheduled(_controller: unknown, env: Env): Promise<void> {
+    await triggerRebuild(env);
+  },
 };
+
+/**
+ * Ask GitHub to run the rebuild workflow on main. Logs the outcome; never throws, so a GitHub
+ * hiccup just means this slot is skipped and the next one tries again.
+ */
+export async function triggerRebuild(env: Env, fetcher: typeof fetch = fetch): Promise<boolean> {
+  if (!env.GITHUB_DISPATCH_TOKEN) {
+    console.warn("[rebuild] GITHUB_DISPATCH_TOKEN is not set; skipping");
+    return false;
+  }
+  try {
+    const res = await fetcher(REBUILD_WORKFLOW_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "mintedsignals-rebuild-timer",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ref: "main" }),
+    });
+    if (res.status === 204) {
+      console.info("[rebuild] workflow started");
+      return true;
+    }
+    console.error(`[rebuild] GitHub answered ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    return false;
+  } catch (error) {
+    console.error("[rebuild] request failed", error);
+    return false;
+  }
+}
 
 export default worker;
 

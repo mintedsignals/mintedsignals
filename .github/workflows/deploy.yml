@@ -1,9 +1,13 @@
 # Rebuilds the static site with fresh market odds and deploys it to Cloudflare.
 #
 # The site is a static export (see next.config.ts), so the odds are only as fresh as the
-# last build. This runs every 30 minutes, on every push to main, and on demand (Actions tab →
-# "Rebuild and deploy" → Run workflow). Keep MARKETS_REFRESH_MINUTES in
-# src/config/markets.ts in step with the schedule.
+# last build. What starts it:
+#   - every 30 minutes: a Cloudflare cron trigger on the Worker (worker/index.ts) calls
+#     workflow_dispatch. GitHub's own scheduler is best-effort (often late, sometimes skipped),
+#     so Cloudflare's punctual timer does the regular work;
+#   - every 6 hours: GitHub's schedule below, as a backup in case the Worker's token stops working;
+#   - every push to main, and on demand (Actions tab → "Rebuild and deploy" → Run workflow).
+# Keep MARKETS_REFRESH_MINUTES in src/config/markets.ts in step with the Cloudflare cron.
 #
 # Needs two repository secrets (Settings → Secrets and variables → Actions):
 #   CLOUDFLARE_API_TOKEN   a token with the "Edit Cloudflare Workers" template
@@ -15,7 +19,7 @@ name: Rebuild and deploy
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "17 */6 * * *"
   push:
     branches: [main]
   workflow_dispatch:

@@ -9,6 +9,9 @@
   // No per-version preview URLs: they'd be indexable duplicates of the site.
   "preview_urls": false,
   "routes": [{ "pattern": "mintedsignals.io", "custom_domain": true }],
+  // Every 30 minutes the Worker asks GitHub to rebuild the site with fresh odds (scheduled()
+  // in worker/index.ts). Needs the GITHUB_DISPATCH_TOKEN secret on the Worker.
+  "triggers": { "crons": ["*/30 * * * *"] },
   "assets": {
     // The static site written by `next build` (output: "export").
     "directory": "out",
