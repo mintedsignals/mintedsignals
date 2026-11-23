@@ -1,0 +1,47 @@
+To read prediction market odds, take the price of a YES share in cents: that number is the market's implied chance in percent. A 62¢ share means about a 62% chance. If you buy it and the outcome happens, each share pays $1, so you make 38¢ per share; if it doesn't, you lose the 62¢ you paid.
+
+## From price to implied chance
+
+| YES price | Implied chance | Profit per share if right | Loss per share if wrong |
+| --- | --- | --- | --- |
+| 10¢ | 10% | 90¢ | 10¢ |
+| 25¢ | 25% | 75¢ | 25¢ |
+| 50¢ | 50% | 50¢ | 50¢ |
+| 62¢ | 62% | 38¢ | 62¢ |
+| 90¢ | 90% | 10¢ | 90¢ |
+
+Cheap shares pay a lot when they win but rarely win. Expensive shares win often but pay little.
+
+## How much $100 buys, and what it pays
+
+Divide your stake by the price. At 62¢, $100 buys about 161.3 shares (100 ÷ 0.62). If the outcome happens, those shares pay $161.29, a profit of $61.29. If it doesn't, you lose the $100.
+
+Try other prices with the calculator:
+
+<OddsCalculator headingLevel={3} />
+
+The calculator ignores fees, spreads and slippage, which all reduce what you actually get. See [liquidity, spreads and slippage](/guides/liquidity-spreads-and-slippage).
+
+## Converting to other odds formats
+
+If you're used to sportsbook odds, these conversions use the same price *p* (as a decimal, so 62¢ = 0.62):
+
+- **Decimal odds** = 1 ÷ p. At 62¢: 1 ÷ 0.62 ≈ 1.61.
+- **Fractional odds** = (1 − p) ÷ p. At 62¢: 0.38 ÷ 0.62 ≈ 0.61, roughly 3/5.
+- **American odds**: if p is above 0.5, −(p ÷ (1 − p)) × 100, so 62¢ ≈ −163. If p is below 0.5, ((1 − p) ÷ p) × 100, so 25¢ = +300.
+
+## Expected value: is a price good?
+
+A trade is only worth making if you think the price is wrong. If you believe the real chance is 70% and YES costs 62¢, your expected value per share is:
+
+0.70 × $1 − $0.62 = **+$0.08**
+
+If you believe the real chance is 55%, it's 0.55 × $1 − $0.62 = **−$0.07**, and buying NO looks better instead. Expected value only helps if your own estimate is better than the market's, which is hard to do consistently.
+
+## Reading the odds tables on this site
+
+- **Yes chance**: the current YES price shown as a percentage.
+- **24h**: how many percentage points the price moved in the last 24 hours.
+- **Volume**: how much was traded in the last 24 hours. For Kalshi this is contracts traded, counted at $1 each.
+
+Odds are shown for information only and are not financial advice.

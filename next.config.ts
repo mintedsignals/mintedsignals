@@ -1,7 +1,7 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {
@@ -20,4 +20,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Guides, reviews and articles are MDX files in src/content. Plugins are named as strings
+// so they work with Turbopack: GitHub tables, and id attributes on headings for anchor links.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-gfm"],
+    rehypePlugins: ["rehype-slug"],
+  },
+});
+
+export default withMDX(nextConfig);

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { categories, guides, platforms, site } from "@/config/site";
+import { articleEntries, guideEntries, reviewEntries } from "@/content";
+import { categories, site } from "@/config/site";
 import { getMarketsSnapshot, venues } from "@/lib/markets";
 import { filtersHref } from "@/lib/markets/filters";
 import { marketPath } from "@/lib/markets/links";
@@ -19,6 +20,8 @@ const staticPaths = [
   "/privacy",
 ];
 
+const published = (e: { status: string }) => e.status === "published";
+
 /** Every page we want indexed, including one entry per tracked market (~1,800). */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { markets, venues: status } = await getMarketsSnapshot();
@@ -31,8 +34,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticPaths.map((p) => ({ url: url(p) })),
-    ...guides.map((g) => ({ url: url(`/guides/${g.slug}`) })),
-    ...platforms.map((p) => ({ url: url(`/platforms/${p.slug}`) })),
+    // Drafts are noindex, so they stay out until published (see src/content/index.ts).
+    ...guideEntries.filter(published).map((g) => ({ url: url(`/guides/${g.slug}`), lastModified: g.updated })),
+    ...reviewEntries.filter(published).map((r) => ({ url: url(`/platforms/${r.slug}`), lastModified: r.updated })),
+    ...articleEntries.filter(published).map((a) => ({ url: url(`/analysis/${a.slug}`), lastModified: a.updated })),
     ...filterPaths.map((p) => ({ url: url(p), changeFrequency: "hourly" as const })),
     ...markets.map((m) => ({
       url: url(marketPath(m)),

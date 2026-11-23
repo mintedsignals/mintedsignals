@@ -58,34 +58,6 @@ export const platformCards: PlatformCard[] = [
   },
 ];
 
-/** Placeholder articles from the design. Phase 5 replaces these with MDX articles. */
-export const analysisPlaceholders = [
-  {
-    kicker: "ECONOMY · MARKET MOVER",
-    title: "Why rate-cut odds swung after the latest jobs report",
-    summary: "What moved, which side the big wallets took, and what to watch before the next meeting.",
-    coverClass: "bg-polymarket-bg",
-  },
-  {
-    kicker: "CRYPTO · WEEKLY",
-    title: "Crypto price markets this week: where the crowd disagrees with analysts",
-    summary: "Comparing year-end price markets with options-implied ranges.",
-    coverClass: "bg-[#FCEBDD]",
-  },
-  {
-    kicker: "POLITICS · EXPLAINER",
-    title: "Are election markets more accurate than polls? What the record shows",
-    summary: "A look at past cycles, where markets beat polling averages and where they missed.",
-    coverClass: "bg-kalshi-bg",
-  },
-  {
-    kicker: "SPORTS · PREVIEW",
-    title: "This weekend in sports markets: the five biggest lines",
-    summary: "Market odds next to sportsbook lines, and where the gap is widest.",
-    coverClass: "bg-chip",
-  },
-];
-
 export const advertiseStats = [
   { value: "[MONTHLY USERS]", label: "monthly unique visitors" },
   { value: "[SUBSCRIBERS]", label: "newsletter subscribers" },

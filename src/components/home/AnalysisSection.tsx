@@ -2,9 +2,9 @@ import Link from "next/link";
 import { AdSlot, adSlotVisible } from "@/components/ads/AdSlot";
 import { NewsletterForm } from "@/components/newsletter/NewsletterForm";
 import { OddsCalculator } from "@/components/tools/OddsCalculator";
-import { analysisPlaceholders } from "@/config/home";
+import { articleEntries, type ArticleEntry } from "@/content";
 
-type Article = (typeof analysisPlaceholders)[number];
+type Article = ArticleEntry;
 
 function ArticleRow({ article, last }: { article: Article; last?: boolean }) {
   return (
@@ -17,8 +17,7 @@ function ArticleRow({ article, last }: { article: Article; last?: boolean }) {
       <div className="flex min-w-0 flex-[1_1_280px] flex-col gap-2">
         <span className="text-xs font-semibold tracking-[0.06em] text-link">{article.kicker}</span>
         <h3 className="font-display text-[23px] leading-[1.2] font-bold">
-          {/* Articles arrive in phase 5; until then the list links to /analysis. */}
-          <Link href="/analysis" className="text-ink no-underline hover:text-link">
+          <Link href={`/analysis/${article.slug}`} className="text-ink no-underline hover:text-link">
             {article.title}
           </Link>
         </h3>
@@ -30,7 +29,7 @@ function ArticleRow({ article, last }: { article: Article; last?: boolean }) {
 }
 
 export function AnalysisSection() {
-  const [first, second, ...rest] = analysisPlaceholders;
+  const [first, second, ...rest] = articleEntries;
 
   return (
     <section id="analysis" className="border-t border-line">

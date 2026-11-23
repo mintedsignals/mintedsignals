@@ -23,6 +23,8 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 - `src/components/layout/`: ticker, header, mobile menu, leaderboard band, footer
 - `src/config/markets.ts`: Kalshi series to track, Polymarket market count, cache time, hottest-list pins
 - `src/lib/markets/`: market data layer. Server only; import from `@/lib/markets` (`getMarketsSnapshot`, `getHottestMarkets`, `getMarket`)
+- `src/content/`: guides, reviews and analysis as MDX, listed in `src/content/index.ts`
+- `src/mdx-components.tsx`: MDX styles and the `<Check>`, `<Callout>` and `<OddsCalculator>` components
 - `src/components/ads/AdSlot.tsx`: fixed-size ad slots (placeholder in dev, nothing in production until zone IDs are set)
 
 ## Phases
@@ -30,7 +32,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 2. Market data layer (Polymarket and Kalshi), with tests (done)
 3. Homepage with live data (done)
 4. Market pages, `/markets`, sitemap (done)
-5. Guides, platform reviews, calculator, advertise page
+5. Guides, platform reviews, calculator, advertise page (done; content in draft)
 6. Ads, affiliate redirects, newsletter route
 7. SEO pass and deploy checklist
 
@@ -41,3 +43,9 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 - `POLYMARKET_API_BASE` / `KALSHI_API_BASE` override the API hosts (testing, or Kalshi's demo environment).
 - Market pages use our own slugs, `<question words>--<venue id>`, because venue slugs aren't reliably readable.
 - Data is cached for 60 seconds. If a venue fails, its last good data is served (kept in server memory per instance).
+
+## Publishing content
+Every guide, review and article starts as a draft: it renders with a draft banner, is marked noindex and stays out of the sitemap.
+1. Replace every highlighted `<Check>…</Check>` in the MDX file with checked facts (search the file for `<Check`).
+2. In `src/content/index.ts`, set the entry's `status` to `"published"` and `updated` to the review date.
+Bracketed placeholders such as [FEE] or [ADS EMAIL] in pages and config also need real values before launch.
