@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Oddsboard: prediction markets homepage</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1F3FD1}a:hover{color:#0E1116}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #0E1116; background: #FFFFFF; width: 100%; min-height: 100%">
+
+  <!-- Ticker -->
+  <div style="background: #0E1116; color: #FFFFFF; height: 40px; overflow: hidden; display: flex; align-items: center">
+    <div style="display: flex; align-items: center; gap: 32px; padding: 0 24px; white-space: nowrap; font-size: 13px">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #9AA3B2">LIVE ODDS</span>
+      <sc-for list="{{ticker}}" as="t" hint-placeholder-count="6">
+        <span style="display: flex; gap: 8px; align-items: center">
+          <span style="color: #D7DBE2">{{t.short}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #FFFFFF">{{t.yesTxt}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; color: {{t.chgDark}}">{{t.chg}}</span>
+        </span>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <header style="border-bottom: 1px solid #E4E6EB">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; min-height: 72px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0E1116">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="7" fill="#0E1116"></rect><rect x="7" y="15" width="4" height="7" rx="1" fill="{{accent}}"></rect><rect x="12" y="10" width="4" height="12" rx="1" fill="#FFFFFF"></rect><rect x="17" y="6" width="4" height="16" rx="1" fill="{{accent}}"></rect></svg>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.02em">Oddsboard</span>
+      </a>
+      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 15px; font-weight: 500">
+        <a href="#markets" style="color: #0E1116; text-decoration: none; padding: 12px 14px">Markets</a>
+        <a href="#guides" style="color: #0E1116; text-decoration: none; padding: 12px 14px">Guides</a>
+        <a href="#platforms" style="color: #0E1116; text-decoration: none; padding: 12px 14px">Platforms</a>
+        <a href="#analysis" style="color: #0E1116; text-decoration: none; padding: 12px 14px">Analysis</a>
+        <a href="#tools" style="color: #0E1116; text-decoration: none; padding: 12px 14px">Odds calculator</a>
+      </nav>
+      <a href="#newsletter" style="background: #0E1116; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px; padding: 13px 18px; border-radius: 10px">Get the daily brief</a>
+    </div>
+  </header>
+
+  <!-- Leaderboard ad -->
+  <div style="background: #F5F6F8; border-bottom: 1px solid #E4E6EB; padding: 20px 24px; display: flex; justify-content: center">
+    <div style="width: 728px; max-width: 100%; height: 90px; border: 1px dashed #A9B0BC; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; background: #FFFFFF">
+      <span style="font-size: 11px; letter-spacing: 0.1em; color: #5A6170; font-family: 'JetBrains Mono', monospace">ADVERTISEMENT</span>
+      <span style="font-size: 13px; color: #5A6170">728 × 90 leaderboard · Coinzilla / Blockchain-Ads</span>
+    </div>
+  </div>
+
+  <!-- Hero + hottest markets -->
+  <section id="markets" style="max-width: 1240px; margin: 0 auto; padding: 56px 24px 64px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+    <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 8px">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #1F3FD1; font-weight: 600">PREDICTION MARKETS, DECODED</span>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 56px; line-height: 1.02; letter-spacing: -0.035em">What the crowd is betting on, and what it means.</h1>
+      <p style="margin: 0; font-size: 18px; line-height: 1.55; color: #3D4350; max-width: 460px">Live odds from Polymarket and Kalshi, plain-English guides, and analysis of the markets moving the most each day.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
+        <a href="#guides" style="background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px; padding: 14px 20px; border-radius: 10px">New here? Start with the basics</a>
+        <a href="#platforms" style="border: 1px solid #C9CDD5; color: #0E1116; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 20px; border-radius: 10px">Compare platforms</a>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px; margin-top: 20px; padding-top: 24px; border-top: 1px solid #E4E6EB">
+        <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700">[N]</span><span style="font-size: 13px; color: #5A6170">markets tracked</span></div>
+        <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700">2</span><span style="font-size: 13px; color: #5A6170">venues at launch</span></div>
+        <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700">60s</span><span style="font-size: 13px; color: #5A6170">odds refresh</span></div>
+      </div>
+    </div>
+
+    <!-- Widget -->
+    <div style="flex: 1.35 1 560px; min-width: 0; border: 1px solid #E4E6EB; border-radius: 16px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(14,17,22,0.04), 0 12px 32px rgba(14,17,22,0.06); overflow: hidden">
+      <div style="padding: 20px 20px 16px; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid #E4E6EB">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.02em">Hottest markets</h2>
+          <div role="group" aria-label="Source" style="display: flex; background: #F1F2F5; border-radius: 10px; padding: 3px; gap: 2px">
+            <sc-for list="{{sources}}" as="s" hint-placeholder-count="3">
+              <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="border: 0; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; padding: 9px 12px; min-height: 36px; border-radius: 8px; background: {{s.bg}}; color: {{s.fg}}">{{s.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div role="group" aria-label="Category" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+            <button type="button" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="cursor: pointer; font: inherit; font-size: 13px; font-weight: 500; padding: 9px 14px; min-height: 36px; border-radius: 999px; border: 1px solid {{t.bd}}; background: {{t.bg}}; color: {{t.fg}}">{{t.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 76px; gap: 12px; padding: 10px 20px; font-size: 11px; letter-spacing: 0.08em; color: #5A6170; font-family: 'JetBrains Mono', monospace; background: #FAFAFB; border-bottom: 1px solid #E4E6EB">
+        <span>MARKET</span><span>YES CHANCE</span><span>24H</span><span style="text-align: right">VOLUME</span>
+      </div>
+
+      <sc-for list="{{markets}}" as="m" hint-placeholder-count="6">
+        <a href="{{m.href}}" rel="sponsored noopener" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 70px 76px; gap: 12px; align-items: center; padding: 14px 20px; border-bottom: 1px solid #EEF0F3; text-decoration: none; color: #0E1116">
+          <span style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+            <span style="font-size: 15px; font-weight: 600; line-height: 1.3">{{m.q}}</span>
+            <span style="display: flex; gap: 8px; align-items: center; font-size: 12px; color: #5A6170">
+              <span style="font-weight: 600; padding: 2px 7px; border-radius: 5px; background: {{m.srcBg}}; color: {{m.srcFg}}">{{m.src}}</span>
+              <span>{{m.cat}}</span>
+            </span>
+          </span>
+          <span style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600">{{m.yesTxt}}</span>
+            <span style="height: 6px; background: #F3E3D9; border-radius: 3px; overflow: hidden; display: block"><span style="display: block; height: 6px; width: {{m.yesW}}; background: {{accent}}; border-radius: 3px"></span></span>
+          </span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: {{m.chgColor}}">{{m.chg}}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3D4350; text-align: right">{{m.vol}}</span>
+        </a>
+      </sc-for>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+        <p style="margin: 0; padding: 32px 20px; text-align: center; color: #5A6170; font-size: 14px">No hot markets in this category on this venue right now.</p>
+      </sc-if>
+
+      <div style="padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; color: #5A6170">
+        <span>Prices are the cost of a YES share in cents, shown as implied chance. Affiliate links.</span>
+        <a href="#all-markets" style="font-weight: 600; font-size: 14px; padding: 8px 0">All markets →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platforms -->
+  <section id="platforms" style="background: #F5F6F8; border-top: 1px solid #E4E6EB; border-bottom: 1px solid #E4E6EB">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 64px 24px; display: flex; flex-direction: column; gap: 32px">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #1F3FD1; font-weight: 600">WHERE TO TRADE</span>
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700; letter-spacing: -0.03em">Prediction market platforms compared</h2>
+        </div>
+        <a href="#reviews" style="font-weight: 600; font-size: 15px; padding: 8px 0">Full reviews and methodology →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px">
+        <article style="background: #FFFFFF; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">Polymarket</h3><span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #E8EDFF; color: #1F3FD1">Largest volume</span></div>
+          <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; font-size: 14px">
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Model</dt><dd style="margin: 0; font-weight: 600">On-chain order book</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Settles in</dt><dd style="margin: 0; font-weight: 600">USDC</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Fees</dt><dd style="margin: 0; font-weight: 600">[FEE]</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Availability</dt><dd style="margin: 0; font-weight: 600">[CHECK REGIONS]</dd></div>
+          </dl>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto">
+            <a href="https://polymarket.com/" rel="sponsored noopener" style="flex: 1 1 auto; text-align: center; background: #0E1116; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px; padding: 13px 16px; border-radius: 10px">Visit Polymarket</a>
+            <a href="#review-polymarket" style="text-align: center; border: 1px solid #C9CDD5; color: #0E1116; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 16px; border-radius: 10px">Review</a>
+          </div>
+        </article>
+        <article style="background: #FFFFFF; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">Kalshi</h3><span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #E6F4F1; color: #0B6B5C">US regulated</span></div>
+          <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; font-size: 14px">
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Model</dt><dd style="margin: 0; font-weight: 600">CFTC-regulated exchange</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Settles in</dt><dd style="margin: 0; font-weight: 600">USD</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Fees</dt><dd style="margin: 0; font-weight: 600">[FEE]</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Availability</dt><dd style="margin: 0; font-weight: 600">[CHECK REGIONS]</dd></div>
+          </dl>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto">
+            <a href="https://kalshi.com/" rel="sponsored noopener" style="flex: 1 1 auto; text-align: center; background: #0E1116; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px; padding: 13px 16px; border-radius: 10px">Visit Kalshi</a>
+            <a href="#review-kalshi" style="text-align: center; border: 1px solid #C9CDD5; color: #0E1116; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 16px; border-radius: 10px">Review</a>
+          </div>
+        </article>
+        <article style="background: #FFFFFF; border: 1px dashed #A9B0BC; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">[Platform 3]</h3><span style="font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: #F1F2F5; color: #3D4350">Featured partner</span></div>
+          <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; font-size: 14px">
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Model</dt><dd style="margin: 0; font-weight: 600">[MODEL]</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Settles in</dt><dd style="margin: 0; font-weight: 600">[CURRENCY]</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Fees</dt><dd style="margin: 0; font-weight: 600">[FEE]</dd></div>
+            <div><dt style="color: #5A6170; font-size: 12px; margin-bottom: 4px">Bonus</dt><dd style="margin: 0; font-weight: 600">[OFFER]</dd></div>
+          </dl>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto">
+            <a href="#partner" rel="sponsored noopener" style="flex: 1 1 auto; text-align: center; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px; padding: 13px 16px; border-radius: 10px">Claim offer</a>
+            <a href="#review-partner" style="text-align: center; border: 1px solid #C9CDD5; color: #0E1116; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 16px; border-radius: 10px">Review</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guides -->
+  <section id="guides" style="max-width: 1240px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px">
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 640px">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #1F3FD1; font-weight: 600">LEARN</span>
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 700; letter-spacing: -0.03em">Prediction markets 101</h2>
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #3D4350">Evergreen guides built to rank: one clear question per page, answered in the first paragraph.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+      <a href="#g1" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">01 · Basics</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">What is a prediction market?</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">How YES and NO shares work, and why prices act like probabilities.</span>
+      </a>
+      <a href="#g2" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">02 · Odds</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">Reading odds: cents, percentages and payouts</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">Turn a 62¢ price into implied chance, payout and expected value.</span>
+      </a>
+      <a href="#g3" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">03 · Platforms</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">Polymarket vs Kalshi</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">Regulation, fees, funding, market depth and who can use each.</span>
+      </a>
+      <a href="#g4" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">04 · Resolution</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">How markets resolve, and when they get disputed</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">Resolution sources, oracles and what happens with ambiguous outcomes.</span>
+      </a>
+      <a href="#g5" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">05 · Strategy</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">Liquidity, spreads and slippage</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">Why the price you see is not always the price you get.</span>
+      </a>
+      <a href="#g6" style="text-decoration: none; color: #0E1116; border: 1px solid #E4E6EB; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px; min-height: 168px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: #1F3FD1">06 · Rules</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.2">Are prediction markets legal where you live?</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #5A6170">A country-by-country page, updated as rules change.</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Analysis + sidebar -->
+  <section id="analysis" style="border-top: 1px solid #E4E6EB">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 64px 24px 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; padding-bottom: 16px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -0.03em">Latest analysis</h2>
+          <a href="#all-analysis" style="font-weight: 600; font-size: 15px; padding: 8px 0">All articles →</a>
+        </div>
+
+        <article style="display: flex; flex-wrap: wrap; gap: 24px; padding: 24px 0; border-top: 1px solid #E4E6EB">
+          <div style="flex: 0 0 220px; height: 140px; border-radius: 10px; background: #E8EDFF; display: flex; align-items: center; justify-content: center; color: #3D4350; font-size: 12px; font-family: 'JetBrains Mono', monospace">[COVER IMAGE]</div>
+          <div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 600; color: #1F3FD1; letter-spacing: 0.06em">ECONOMY · MARKET MOVER</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1.2"><a href="#a1" style="color: #0E1116; text-decoration: none">Why rate-cut odds swung after the latest jobs report</a></h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #3D4350">What moved, which side the big wallets took, and what to watch before the next meeting.</p>
+            <span style="font-size: 13px; color: #5A6170">[AUTHOR] · [DATE]</span>
+          </div>
+        </article>
+
+        <article style="display: flex; flex-wrap: wrap; gap: 24px; padding: 24px 0; border-top: 1px solid #E4E6EB">
+          <div style="flex: 0 0 220px; height: 140px; border-radius: 10px; background: #FCEBDD; display: flex; align-items: center; justify-content: center; color: #3D4350; font-size: 12px; font-family: 'JetBrains Mono', monospace">[COVER IMAGE]</div>
+          <div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 600; color: #1F3FD1; letter-spacing: 0.06em">CRYPTO · WEEKLY</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1.2"><a href="#a2" style="color: #0E1116; text-decoration: none">Crypto price markets this week: where the crowd disagrees with analysts</a></h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #3D4350">Comparing year-end price markets with options-implied ranges.</p>
+            <span style="font-size: 13px; color: #5A6170">[AUTHOR] · [DATE]</span>
+          </div>
+        </article>
+
+        <!-- Native ad -->
+        <aside aria-label="Sponsored" style="display: flex; flex-wrap: wrap; gap: 24px; padding: 20px; margin: 8px 0; border: 1px dashed #A9B0BC; border-radius: 12px; background: #FAFAFB">
+          <div style="flex: 0 0 180px; height: 110px; border-radius: 8px; background: #EEF0F3; display: flex; align-items: center; justify-content: center; color: #5A6170; font-size: 12px; font-family: 'JetBrains Mono', monospace">[AD CREATIVE]</div>
+          <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px; justify-content: center">
+            <span style="font-size: 11px; letter-spacing: 0.1em; color: #5A6170; font-family: 'JetBrains Mono', monospace">SPONSORED · NATIVE IN-FEED UNIT</span>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700">[Advertiser headline]</span>
+            <span style="font-size: 14px; color: #3D4350">[Advertiser description, up to two lines]</span>
+          </div>
+        </aside>
+
+        <article style="display: flex; flex-wrap: wrap; gap: 24px; padding: 24px 0; border-top: 1px solid #E4E6EB">
+          <div style="flex: 0 0 220px; height: 140px; border-radius: 10px; background: #E6F4F1; display: flex; align-items: center; justify-content: center; color: #3D4350; font-size: 12px; font-family: 'JetBrains Mono', monospace">[COVER IMAGE]</div>
+          <div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 600; color: #1F3FD1; letter-spacing: 0.06em">POLITICS · EXPLAINER</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1.2"><a href="#a3" style="color: #0E1116; text-decoration: none">Are election markets more accurate than polls? What the record shows</a></h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #3D4350">A look at past cycles, where markets beat polling averages and where they missed.</p>
+            <span style="font-size: 13px; color: #5A6170">[AUTHOR] · [DATE]</span>
+          </div>
+        </article>
+
+        <article style="display: flex; flex-wrap: wrap; gap: 24px; padding: 24px 0; border-top: 1px solid #E4E6EB; border-bottom: 1px solid #E4E6EB">
+          <div style="flex: 0 0 220px; height: 140px; border-radius: 10px; background: #F1F2F5; display: flex; align-items: center; justify-content: center; color: #3D4350; font-size: 12px; font-family: 'JetBrains Mono', monospace">[COVER IMAGE]</div>
+          <div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 600; color: #1F3FD1; letter-spacing: 0.06em">SPORTS · PREVIEW</span>
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1.2"><a href="#a4" style="color: #0E1116; text-decoration: none">This weekend in sports markets: the five biggest lines</a></h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #3D4350">Market odds next to sportsbook lines, and where the gap is widest.</p>
+            <span style="font-size: 13px; color: #5A6170">[AUTHOR] · [DATE]</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sidebar -->
+      <aside style="flex: 1 1 300px; max-width: 340px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+        <div style="width: 300px; max-width: 100%; height: 250px; border: 1px dashed #A9B0BC; border-radius: 6px; background: #F5F6F8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+          <span style="font-size: 11px; letter-spacing: 0.1em; color: #5A6170; font-family: 'JetBrains Mono', monospace">ADVERTISEMENT</span>
+          <span style="font-size: 13px; color: #5A6170">300 × 250</span>
+        </div>
+
+        <!-- Calculator -->
+        <div id="tools" style="border: 1px solid #E4E6EB; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 16px">
+          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700">Odds calculator</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <label for="price" style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 500"><span>YES share price</span><span style="font-family: 'JetBrains Mono', monospace; font-weight: 600">{{priceTxt}}</span></label>
+            <input id="price" type="range" min="1" max="99" step="1" value="{{price}}" onChange="{{setPrice}}" style="width: 100%; accent-color: {{accent}}; height: 28px">
+          </div>
+          <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <div style="background: #F5F6F8; border-radius: 10px; padding: 12px"><dt style="font-size: 12px; color: #5A6170; margin-bottom: 4px">Implied chance</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600">{{implied}}</dd></div>
+            <div style="background: #F5F6F8; border-radius: 10px; padding: 12px"><dt style="font-size: 12px; color: #5A6170; margin-bottom: 4px">$100 buys</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600">{{shares}}</dd></div>
+            <div style="background: #F5F6F8; border-radius: 10px; padding: 12px"><dt style="font-size: 12px; color: #5A6170; margin-bottom: 4px">Pays if YES</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600">{{payout}}</dd></div>
+            <div style="background: #F5F6F8; border-radius: 10px; padding: 12px"><dt style="font-size: 12px; color: #5A6170; margin-bottom: 4px">Profit</dt><dd style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600; color: #1F3FD1">{{profit}}</dd></div>
+          </dl>
+          <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #5A6170">Before fees and slippage. Each share pays $1 if the outcome happens.</p>
+        </div>
+
+        <!-- Newsletter -->
+        <form id="newsletter" style="background: #0E1116; color: #FFFFFF; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700">The daily brief</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #C4C9D2">The five markets that moved most overnight, in a two-minute read.</p>
+          <label for="email" style="font-size: 13px; color: #C4C9D2">Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" style="font: inherit; font-size: 15px; padding: 12px 14px; border-radius: 10px; border: 1px solid #3A404C; background: #1A1F27; color: #FFFFFF; min-height: 44px; box-sizing: border-box">
+          <button type="submit" style="font: inherit; font-weight: 600; font-size: 15px; padding: 13px; min-height: 44px; border: 0; border-radius: 10px; cursor: pointer; background: {{accent}}; color: #FFFFFF">Subscribe free</button>
+        </form>
+
+        <div style="width: 300px; max-width: 100%; height: 600px; border: 1px dashed #A9B0BC; border-radius: 6px; background: #F5F6F8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px">
+          <span style="font-size: 11px; letter-spacing: 0.1em; color: #5A6170; font-family: 'JetBrains Mono', monospace">ADVERTISEMENT</span>
+          <span style="font-size: 13px; color: #5A6170">300 × 600 · sticky</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Advertise band -->
+  <section id="advertise" style="background: #0E1116; color: #FFFFFF">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 72px 24px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+      <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #9DB0FF; font-weight: 600">FOR BRANDS AND NETWORKS</span>
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.08">Reach people who already trade on outcomes.</h2>
+        <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #C4C9D2; max-width: 520px">Display, sponsored market widgets, newsletter placements and featured platform listings.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
+          <a href="#media-kit" style="background: #FFFFFF; color: #0E1116; text-decoration: none; font-weight: 600; font-size: 15px; padding: 14px 20px; border-radius: 10px">Download the media kit</a>
+          <a href="mailto:[ADS EMAIL]" style="border: 1px solid #4A5160; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 20px; border-radius: 10px">Contact sales</a>
+        </div>
+      </div>
+      <div style="flex: 1 1 420px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <div style="border: 1px solid #2A303B; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">[MONTHLY USERS]</span><span style="font-size: 14px; color: #C4C9D2">monthly unique visitors</span></div>
+        <div style="border: 1px solid #2A303B; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">[SUBSCRIBERS]</span><span style="font-size: 14px; color: #C4C9D2">newsletter subscribers</span></div>
+        <div style="border: 1px solid #2A303B; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">[TOP GEOS]</span><span style="font-size: 14px; color: #C4C9D2">top traffic countries</span></div>
+        <div style="border: 1px solid #2A303B; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700">[CRYPTO %]</span><span style="font-size: 14px; color: #C4C9D2">of readers hold crypto</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #F5F6F8; border-top: 1px solid #E4E6EB">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 48px 24px 40px; display: flex; flex-direction: column; gap: 32px">
+      <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between">
+        <div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 10px; max-width: 360px">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px">Oddsboard</span>
+          <p style="margin: 0; font-size: 14px; line-height: 1.55; color: #3D4350">Independent news, data and guides on prediction markets.</p>
+        </div>
+        <nav aria-label="Footer" style="display: flex; flex-wrap: wrap; gap: 48px; font-size: 14px">
+          <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-weight: 600">Markets</span><a href="#f-pol">Politics</a><a href="#f-cry">Crypto</a><a href="#f-eco">Economy</a><a href="#f-spo">Sports</a></div>
+          <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-weight: 600">Learn</span><a href="#f-g">Guides</a><a href="#f-gl">Glossary</a><a href="#f-calc">Odds calculator</a><a href="#f-leg">Legality by country</a></div>
+          <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-weight: 600">Company</span><a href="#f-about">About and editorial policy</a><a href="#advertise">Advertise</a><a href="#f-disc">Affiliate disclosure</a><a href="#f-contact">Contact</a></div>
+        </nav>
+      </div>
+      <p style="margin: 0; padding-top: 24px; border-top: 1px solid #DDE0E5; font-size: 13px; line-height: 1.6; color: #4A5160">18+. Trading on prediction markets involves risk of loss and is not available in every country; check your local rules. Some links are affiliate links and we may earn a commission at no cost to you. Odds are shown for information only and are not financial advice. Market data from Polymarket and Kalshi.</p>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2F5BFF","options":["#2F5BFF","#0B6B5C","#6D28D9","#0E1116"]},"$preview":{"width":1440,"height":3700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#2F5BFF';
+    const cat = this.state.cat || 'All';
+    const src = this.state.src || 'All';
+    const price = this.state.price || 62;
+
+    const all = [
+      { q: 'Fed cuts rates at the December FOMC meeting?', short: 'Fed Dec cut', cat: 'Economy', src: 'Kalshi', yes: 64, chg: 4.2, vol: '$3.1M' },
+      { q: 'Bitcoin closes 2026 above $100k?', short: 'BTC > $100k EOY', cat: 'Crypto', src: 'Polymarket', yes: 41, chg: -2.8, vol: '$8.7M' },
+      { q: 'US government shutdown before January 31?', short: 'Shutdown by Jan 31', cat: 'Politics', src: 'Polymarket', yes: 27, chg: 6.1, vol: '$2.2M' },
+      { q: 'US recession officially declared in 2027?', short: 'Recession 2027', cat: 'Economy', src: 'Kalshi', yes: 22, chg: -0.9, vol: '$1.4M' },
+      { q: 'Real Madrid win the 2026/27 Champions League?', short: 'Real Madrid UCL', cat: 'Sports', src: 'Polymarket', yes: 18, chg: 1.5, vol: '$4.0M' },
+      { q: 'Ethereum ETFs see net inflows this week?', short: 'ETH ETF inflows', cat: 'Crypto', src: 'Polymarket', yes: 57, chg: -3.4, vol: '$950K' },
+      { q: 'Top film of 2026 passes $1.5B worldwide?', short: 'Film > $1.5B', cat: 'Culture', src: 'Kalshi', yes: 35, chg: 2.0, vol: '$610K' },
+      { q: 'Senate passes the crypto market structure bill this year?', short: 'Crypto bill passes', cat: 'Politics', src: 'Kalshi', yes: 31, chg: -5.2, vol: '$1.8M' }
+    ].map((m) => ({
+      ...m,
+      yesTxt: m.yes + '%',
+      yesW: m.yes + '%',
+      chg: (m.chg > 0 ? '+' : '') + m.chg.toFixed(1),
+      chgColor: m.chg > 0 ? '#1F3FD1' : '#B4400C',
+      chgDark: m.chg > 0 ? '#9DB0FF' : '#FDBA8C',
+      srcBg: m.src === 'Polymarket' ? '#E8EDFF' : '#E6F4F1',
+      srcFg: m.src === 'Polymarket' ? '#1F3FD1' : '#0B6B5C',
+      href: m.src === 'Polymarket' ? 'https://polymarket.com/' : 'https://kalshi.com/'
+    }));
+
+    const markets = all.filter((m) => (cat === 'All' || m.cat === cat) && (src === 'All' || m.src === src));
+
+    const tabs = ['All', 'Politics', 'Crypto', 'Economy', 'Sports', 'Culture'].map((t) => ({
+      label: t,
+      pick: () => this.setState({ cat: t }),
+      pressed: t === cat ? 'true' : 'false',
+      bg: t === cat ? '#0E1116' : '#FFFFFF',
+      fg: t === cat ? '#FFFFFF' : '#0E1116',
+      bd: t === cat ? '#0E1116' : '#D5D8DE'
+    }));
+
+    const sources = [['All', 'All venues'], ['Polymarket', 'Polymarket'], ['Kalshi', 'Kalshi']].map(([id, label]) => ({
+      label,
+      pick: () => this.setState({ src: id }),
+      pressed: id === src ? 'true' : 'false',
+      bg: id === src ? '#FFFFFF' : 'transparent',
+      fg: id === src ? '#0E1116' : '#4A5160'
+    }));
+
+    const p = price / 100;
+    const shares = 100 / p;
+    return {
+      accent,
+      ticker: all.slice(0, 7),
+      markets,
+      empty: markets.length === 0,
+      tabs,
+      sources,
+      price,
+      priceTxt: price + '¢',
+      implied: price + '%',
+      shares: shares.toFixed(1) + ' sh',
+      payout: '$' + shares.toFixed(2),
+      profit: '+$' + (shares - 100).toFixed(2),
+      setPrice: (e) => this.setState({ price: Math.max(1, Math.min(99, Number(e.target.value) || 1)) })
+    };
+  }
+}
+</script>
+</body>
+</html>

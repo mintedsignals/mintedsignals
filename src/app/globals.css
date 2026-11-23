@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Design tokens from docs/design/design-reference.html (see docs/BRIEF.md).
+ * Each colour becomes a Tailwind utility: bg-ink, text-muted, border-line…
+ */
+@theme {
+  /* Core palette */
+  --color-ink: #0e1116;
+  --color-body: #3d4350;
+  --color-muted: #5a6170;
+  --color-line: #e4e6eb;
+  --color-surface: #f5f6f8;
+  --color-accent: #2f5bff;
+  --color-link: #1f3fd1;
+  --color-positive: #1f3fd1;
+  --color-negative: #b4400c;
+
+  /* Venue badges */
+  --color-polymarket-bg: #e8edff;
+  --color-polymarket-fg: #1f3fd1;
+  --color-kalshi-bg: #e6f4f1;
+  --color-kalshi-fg: #0b6b5c;
+
+  /* Secondary greys used in the design */
+  --color-line-strong: #c9cdd5; /* outline buttons */
+  --color-line-dashed: #a9b0bc; /* ad and placeholder outlines */
+  --color-line-soft: #eef0f3; /* row dividers */
+  --color-footer-rule: #dde0e5;
+  --color-footer-text: #4a5160;
+  --color-subtle: #fafafb; /* table header, native ad */
+  --color-chip: #f1f2f5; /* segmented control, neutral badge */
+
+  /* Dark surfaces (ticker, newsletter, advertise band) */
+  --color-dark-text: #c4c9d2;
+  --color-dark-label: #9aa3b2;
+  --color-dark-ticker: #d7dbe2;
+  --color-dark-border: #2a303b;
+  --color-dark-positive: #9db0ff;
+  --color-dark-negative: #fdba8c;
+
+  /* Fonts (CSS variables set by next/font in layout.tsx) */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Layout */
+  --container-page: 1240px;
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-panel: 16px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    @apply bg-white font-sans text-ink;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Tailwind text-* utilities on a link override these, as in the design. */
+  a {
+    color: var(--color-link);
+  }
+
+  a:hover {
+    color: var(--color-ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Centred 1240px column with the design's 24px side padding */
+  .page-container {
+    @apply mx-auto w-full max-w-page px-6;
+  }
+
+  /* Small monospace label above section headings, e.g. "WHERE TO TRADE" */
+  .eyebrow {
+    @apply font-mono text-xs font-semibold tracking-[0.1em] text-link;
+  }
 }
