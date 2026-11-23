@@ -79,6 +79,16 @@ describe("Kalshi helpers", () => {
     expect(noPrevious?.change24h).toBeNull();
   });
 
+  it("uses rules_primary as resolution rules", () => {
+    const event = { title: "E", series_ticker: "KXE" };
+    const m = normalizeKalshiMarket(
+      { ticker: "KXE-1", last_price_dollars: "0.5", rules_primary: "If the Fed holds rates, resolves Yes." },
+      event,
+      { marketsInEvent: 1 },
+    );
+    expect(m?.rules).toBe("If the Fed holds rates, resolves Yes.");
+  });
+
   it("skips scalar markets and markets with no price", () => {
     const event = { title: "E", series_ticker: "KXE" };
     expect(normalizeKalshiMarket({ ticker: "A", market_type: "scalar", last_price_dollars: "0.5" }, event, { marketsInEvent: 1 })).toBeNull();

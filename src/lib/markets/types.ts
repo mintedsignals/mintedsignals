@@ -36,7 +36,14 @@ export interface Market {
   /** Groups markets from the same event, e.g. every candidate in one election. */
   eventId: string;
   isOpen: boolean;
+  /** How the market resolves, in the venue's own words. Null if the venue doesn't say. */
+  rules: string | null;
 }
+
+/** A market without the long rules text, for lists sent to the browser. */
+export type MarketSummary = Omit<Market, "rules">;
+
+export const toSummary = ({ rules: _rules, ...summary }: Market): MarketSummary => summary;
 
 export type VenueStatus = {
   /** ok: fetched this cycle. stale: fetch failed, serving last good data. unavailable: no data at all. */

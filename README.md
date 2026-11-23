@@ -29,7 +29,7 @@ Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
 1. Scaffold, design tokens, layout, header and footer (done)
 2. Market data layer (Polymarket and Kalshi), with tests (done)
 3. Homepage with live data (done)
-4. Market pages, `/markets`, sitemap
+4. Market pages, `/markets`, sitemap (done)
 5. Guides, platform reviews, calculator, advertise page
 6. Ads, affiliate redirects, newsletter route
 7. SEO pass and deploy checklist

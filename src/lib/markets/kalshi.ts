@@ -20,6 +20,7 @@ export interface KalshiMarket {
   market_type?: string;
   status?: string;
   yes_sub_title?: string;
+  rules_primary?: string;
   yes_bid_dollars?: string;
   yes_ask_dollars?: string;
   last_price_dollars?: string;
@@ -94,6 +95,7 @@ export function normalizeKalshiMarket(
     url: series ? `https://kalshi.com/markets/${series.toLowerCase()}` : "https://kalshi.com/",
     eventId: `kalshi:${m.event_ticker ?? event.event_ticker ?? m.ticker}`,
     isOpen: m.status === "active",
+    rules: m.rules_primary?.trim() || null,
   };
 }
 

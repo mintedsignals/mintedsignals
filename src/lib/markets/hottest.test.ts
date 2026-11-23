@@ -18,6 +18,7 @@ function market(id: string, volume24h: number, extra: Partial<Market> = {}): Mar
     url: "",
     eventId: `event-${id}`,
     isOpen: true,
+    rules: null,
     ...extra,
   };
 }

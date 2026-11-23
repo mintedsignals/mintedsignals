@@ -33,6 +33,12 @@ describe("normalizePolymarketMarket (real API sample)", () => {
     expect(m.isOpen).toBe(true);
   });
 
+  it("uses the description as resolution rules", () => {
+    const base = { id: "1", slug: "s", question: "Q", outcomes: '["Yes","No"]', outcomePrices: '["0.5","0.5"]' };
+    expect(normalizePolymarketMarket({ ...base, description: "  Resolves YES if...  " })?.rules).toBe("Resolves YES if...");
+    expect(normalizePolymarketMarket({ ...base, description: "" })?.rules).toBeNull();
+  });
+
   it("keeps change24h null when Polymarket omits it", () => {
     expect(byQuestion("Will Kristi Noem").change24h).toBeNull();
   });

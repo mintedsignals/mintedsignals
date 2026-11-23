@@ -16,6 +16,7 @@ export const KEYSET_PAGE_SIZE = 100; // documented maximum for /markets/keyset
 export interface GammaMarket {
   id?: string;
   question?: string;
+  description?: string;
   slug?: string;
   active?: boolean;
   closed?: boolean;
@@ -80,6 +81,7 @@ export function normalizePolymarketMarket(m: GammaMarket): Market | null {
     url,
     eventId: `polymarket:${event?.id ?? event?.slug ?? m.id}`,
     isOpen: m.active === true && m.closed !== true && m.archived !== true,
+    rules: m.description?.trim() || null,
   };
 }
 

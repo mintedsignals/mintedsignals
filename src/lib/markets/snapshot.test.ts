@@ -16,6 +16,7 @@ const m = (id: string, venue: Market["venue"]): Market => ({
   url: "",
   eventId: id,
   isOpen: true,
+  rules: null,
 });
 
 const t1 = () => new Date("2026-11-16T10:00:00Z");

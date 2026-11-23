@@ -37,3 +37,19 @@ const trim = (n: number) => (n >= 100 ? Math.round(n).toString() : (Math.round(n
 
 /** Whole-number count with separators: 1826 -> "1,826". */
 export const formatCount = (n: number) => n.toLocaleString("en-US");
+
+/** "2026-12-09T18:59:00Z" -> "Dec 9, 2026" (UTC, so server and browser agree). */
+export function formatDate(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
+/** "2026-11-16T20:34:12Z" -> "20:34 UTC". */
+export function formatTimeUtc(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return `${d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC`;
+}

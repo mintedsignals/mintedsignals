@@ -1,5 +1,5 @@
 import type { Category } from "@/config/site";
-import type { Market, Venue } from "./types";
+import type { MarketSummary, Venue } from "./types";
 
 export interface HottestOptions {
   venue?: Venue;
@@ -12,7 +12,7 @@ export interface HottestOptions {
 }
 
 /** Open markets sorted by 24h volume, pins first. */
-export function selectHottest(markets: Market[], options: HottestOptions = {}): Market[] {
+export function selectHottest<T extends MarketSummary>(markets: T[], options: HottestOptions = {}): T[] {
   const { venue, category, limit = 8, onePerEvent = true, pinned = [] } = options;
 
   const candidates = markets.filter(
@@ -24,7 +24,7 @@ export function selectHottest(markets: Market[], options: HottestOptions = {}): 
   const pinIds = new Set(pins.map((m) => m.id));
   const rest = candidates.filter((m) => !pinIds.has(m.id)).sort((a, b) => b.volume24h - a.volume24h);
 
-  const selected: Market[] = [];
+  const selected: T[] = [];
   const seenEvents = new Set<string>();
   for (const m of [...pins, ...rest]) {
     if (selected.length >= limit) break;
